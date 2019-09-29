@@ -36,7 +36,6 @@ export class LoginComponent implements OnInit {
       .subscribe(
         respObj => {
           this.alertService.success('','Login successful!');
-          console.log(respObj);
         },
         err => {
           this.alertService.error('Login Error', err.error.message)
