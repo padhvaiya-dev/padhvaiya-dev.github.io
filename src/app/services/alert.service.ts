@@ -8,26 +8,26 @@ export class AlertService {
 
   constructor(private toastr: ToastrService) { }
 
-  success(title: string, message: string) {
-    this.toastr.success(message, title, {
+  success(message: string) {
+    this.toastr.success(message, '', {
       toastClass: "alert alert-success alert-with-icon"
     });
   }
 
-  error(title: string, message: string) {
-    this.toastr.error(message, title, {
+  error(message: string) {
+    this.toastr.error(message, '', {
       toastClass: "alert alert-danger alert-with-icon"
     });
   }
 
-  info(title: string, message: string) {
-    this.toastr.info(message, title, {
+  info(message: string) {
+    this.toastr.info(message, '', {
       toastClass: "alert alert-info alert-with-icon"
     });
   }
 
-  warning(title: string, message: string) {
-    this.toastr.warning(message, title, {
+  warning(message: string) {
+    this.toastr.warning(message, '', {
       toastClass: "alert alert-warning alert-with-icon"
     });
   }

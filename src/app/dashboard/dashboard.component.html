@@ -1,0 +1,44 @@
+<app-navbar></app-navbar>
+<div class="search-sec">
+    <div class="container">
+        <div class="search-box">
+            <form [formGroup]="searchBox" (ngSubmit)="onSearch()">
+                <input type="text" formControlName="search" placeholder="Enter your questions  here...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="main">
+    <div class="container">
+        <div class="main-section-data">
+            <div class="row mt-5">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-6">
+                    <div class="post-bar" *ngFor="let question of questionList">
+                        <div class="post_topbar">
+                            <div class="usy-dt">
+                                <img src="assets/images/cmp-icon6.png" width="35" height="35">
+                                <div class="usy-name">
+                                    <h3>Question creator</h3>
+                                    <span>
+                                        <img src="assets/images/clock.png">
+                                        3 min ago
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="job_descp">
+                            <a routerLink="/questions/{{question.id}}"><h3 style="cursor: pointer; text-decoration: underline">{{question.desc}}</h3></a>
+                            <div *ngIf="question?.answers?.length == 0; else hasAns">
+                                No Answer
+                            </div>
+                            <ng-template #hasAns>{{question.answers[0].desc}}</ng-template>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+        </div>
+    </div>
+</div>

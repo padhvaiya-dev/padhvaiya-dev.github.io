@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { DataService } from '../services/data.service';
 import { AlertService } from '../services/alert.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -15,18 +16,22 @@ export class LoginComponent implements OnInit {
   constructor(
     private _fb: FormBuilder,
     private _dataService: DataService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private _router: Router
   ) {
+    if(this._dataService.currentUserValue){
+      this._router.navigateByUrl('/dashboard')
+    }
   }
 
   onSignUp() {
     this._dataService.createUser(this.signUpForm.value)
       .subscribe(
         _ => {
-          this.alertService.success('', 'Signup successful! You can now login!');
+          this.alertService.success('Signup successful! You can now login!');
         },
         err => {
-          this.alertService.error('Signup Error', err.error.message);
+          this.alertService.error(err);
         }
       )
   }
@@ -34,11 +39,12 @@ export class LoginComponent implements OnInit {
   onLogin() {
     this._dataService.login(this.loginForm.value)
       .subscribe(
-        respObj => {
-          this.alertService.success('','Login successful!');
+        _ => {
+          this.alertService.success('Login successful!');
+          this._router.navigateByUrl('/dashboard');
         },
         err => {
-          this.alertService.error('Login Error', err.error.message)
+          this.alertService.error(err)
         }
       )
   }
