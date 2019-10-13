@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { DataService } from '../services/data.service';
 import { AlertService } from '../services/alert.service'
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 
 @Component({
@@ -10,19 +11,15 @@ import { AlertService } from '../services/alert.service'
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-
-  searchBox: FormGroup;
+  search: FormControl = new FormControl('');
   questionList: Array<object>;
+  searchTerm: string = ' ';
   constructor(
-    private _fb: FormBuilder,
     private _dataService: DataService,
     private _notify: AlertService
   ) { }
 
   ngOnInit() {
-    this.searchBox = this._fb.group({
-      search: ['']
-    })
     this._dataService.fetchQuestions()
       .subscribe(questionList => {
         this.questionList = questionList;

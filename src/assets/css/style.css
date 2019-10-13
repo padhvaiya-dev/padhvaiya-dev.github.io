@@ -3572,12 +3572,12 @@ a:hover {
 	width: 100%;
 	padding: 0 15px;
 }
-.search-box form {
+.search-box {
 	float: left;
 	width: 100%;
 	position: relative;
 }
-.search-box form input {
+.search-box input {
 	width: 100%;
 	height: 40px;
 	background-color: #fff;
@@ -3591,7 +3591,7 @@ a:hover {
 	-o-box-shadow: 0 4px 8px rgba(0,0,0,0.20);
 	box-shadow: 0 4px 8px rgba(0,0,0,0.20);
 }
-.search-box form button {
+.search-box button {
 	position: absolute;
 	top: 0;
 	right: 0;

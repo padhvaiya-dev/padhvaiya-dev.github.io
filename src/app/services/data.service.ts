@@ -104,6 +104,11 @@ export class DataService {
       .pipe(catchError(this.handleError))
   }
 
+  searchByQuestion(searchQuery: string){
+    return this._http.get(environment.apiUrl+'/search')
+      .pipe(catchError(this.handleError));
+  }
+
   updateCoverImage(image: File): Observable<Response> {
     const formData = new FormData();
     formData.append('image', image);

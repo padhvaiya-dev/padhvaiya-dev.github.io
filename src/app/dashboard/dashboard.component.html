@@ -2,10 +2,7 @@
 <div class="search-sec">
     <div class="container">
         <div class="search-box">
-            <form [formGroup]="searchBox" (ngSubmit)="onSearch()">
-                <input type="text" formControlName="search" placeholder="Enter your questions  here...">
-                <button type="submit">Search</button>
-            </form>
+                <input type="text" [(ngModel)]="searchTerm" placeholder="Enter your questions  here...">
         </div>
     </div>
 </div>
@@ -15,7 +12,7 @@
             <div class="row mt-5">
                 <div class="col-lg-3"></div>
                 <div class="col-lg-6">
-                    <div class="post-bar" *ngFor="let question of questionList">
+                    <div class="post-bar" *ngFor="let question of questionList | filter:searchTerm">
                         <div class="post_topbar">
                             <div class="usy-dt">
                                 <img src="assets/images/cmp-icon6.png" width="35" height="35">
