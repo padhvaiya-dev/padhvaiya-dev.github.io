@@ -76,19 +76,19 @@
                                 <ng-template #askQuestion>
 
                                     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
-                                        data-target="#exampleModal">
+                                        data-target="#dashModal">
                                         Ask a question
                                     </button>
 
                                     <!-- Question Modal -->
-                                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true" #questionBox>
+                                    <div class="modal fade" id="dashModal" tabindex="-1" role="dialog"
+                                        aria-labelledby="dashModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h3 class="modal-title" id="exampleModalLabel">Ask a Question</h3>
+                                                    <h3 class="modal-title" id="dashModalLabel">Ask a Question</h3>
                                                     <button type="button" class="close" data-dismiss="modal"
-                                                        aria-label="Close">
+                                                        aria-label="Close" #closeButton>
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
@@ -139,7 +139,7 @@
                                         </div>
                                     </div>
                                     <div class="job_descp">
-                                        <a routerLink="../questions/{{question.id}}"><h3>{{question.desc}}</h3></a>
+                                        <a routerLink="../questions/{{question.id}}"><h3 style="text-decoration: underline">{{question.desc}}</h3></a>
                                         <div *ngIf="question?.answers?.length == 0; else hasAns">
                                             No Answer
                                         </div>

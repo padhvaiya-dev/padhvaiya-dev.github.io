@@ -32,7 +32,7 @@ export class UserProfileComponent implements OnInit {
   @ViewChild('userTab', { static: true }) public userTabEl: ElementRef;
   @ViewChild('productTab', { static: true }) public productTabEl: ElementRef;
   @ViewChild('questionSettings', { static: false }) public questionSettingsEl: ElementRef;
-  @ViewChild('questionBox', { static: true }) public questionBox: ElementRef;
+  @ViewChild('closeButton', { static: false }) public closeButtonEl: ElementRef;
 
   constructor(
     private _datatService: DataService,
@@ -71,13 +71,12 @@ export class UserProfileComponent implements OnInit {
   }
 
   onNewQuestionSubmit() {
-    this._renderer.removeClass(this.questionBox.nativeElement, 'show');
     const userId: number = this._stateService.userState.userId;
-    if (!this.askQuestionForm.valid) this._notify.warning('Question cannot be empty');
+    if (!this.askQuestionForm.valid) return this._notify.warning('Question cannot be empty');
     this._datatService.createQuestionByUser(this.askQuestionForm.value, userId)
-      .subscribe(respObj => {
+      .subscribe(_ => {
         this.fetchUserDetails();
-        this.questionBox.nativeElement.style.display = 'None';
+        this.closeButtonEl.nativeElement.click();
       },
         err => {
           this._notify.error(err);

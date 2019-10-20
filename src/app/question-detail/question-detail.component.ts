@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../services/data.service';
 import { AlertService } from '../services/alert.service';
@@ -18,7 +18,7 @@ export class QuestionDetailComponent implements OnInit {
   answerCount: number;
   answerList: Array<object>;
   answerForm: FormGroup
-
+  @ViewChild('closeButton', { static: false }) public closeButtonEl: ElementRef;
   constructor(
     private _route: ActivatedRoute,
     private _dataService: DataService,
@@ -71,6 +71,8 @@ export class QuestionDetailComponent implements OnInit {
     this._dataService.createAnswerByUserAndQuestion(this.answerForm.value, userId, this.questionId)
       .subscribe(_ => {
         this._notify.success('You wrote an answer!');
+        this.fetchAnswersByQuestion(this.questionId);
+        this.closeButtonEl.nativeElement.click();
       },
         err => {
           this._notify.error(err);

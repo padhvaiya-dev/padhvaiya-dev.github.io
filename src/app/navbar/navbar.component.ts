@@ -16,6 +16,8 @@ export class NavbarComponent implements OnInit {
   @ViewChild('userSettings', { static: true }) private userSettingsEl: ElementRef;
   @ViewChild('quesTab', { static: false }) public quesTabEl: ElementRef;
   @ViewChild('ansTab', { static: false }) public ansTabEl: ElementRef;
+  @ViewChild('closeButton', { static: false }) public closeButtonEl: ElementRef;
+
   askQuestionForm: FormGroup
   userLoggedIn: string = 'Guest';
   constructor(
@@ -37,15 +39,40 @@ export class NavbarComponent implements OnInit {
     this._dataService.logout();
   }
 
+  fetchUserDetails() {
+    this._dataService.fetchLoggedInUserId()
+      .subscribe(respObj => {
+        const userId: number = respObj['id'];
+        this._dataService.fetchUserById(userId)
+          .subscribe(respObj => {
+            this._stateService.userState.userId = respObj['id'];
+            this._stateService.userState.email = respObj['email'];
+            this._stateService.userState.firstName = respObj['firstName'];
+            this._stateService.userState.lastName = respObj['lastName'];
+            this._stateService.userState.questionList = respObj['questions'];
+            this._stateService.userState.answerList = respObj['answers'];
+            this._stateService.userState.questionsCount = respObj['questions'].length;
+            this._stateService.userState.answersCount = respObj['answers'].length;
+          }, err => {
+            this._notify.error(err);
+          })
+      },
+        err => {
+          this._notify.error(err)
+        })
+  }
+
   onNewQuestionSubmit() {
     const userId: number = this._stateService.userState.userId;
     if (!this.askQuestionForm.valid) this._notify.warning('Question cannot be empty');
     this._dataService.createQuestionByUser(this.askQuestionForm.value, userId)
-      .subscribe(respObj => {
-        console.log(respObj);
+      .subscribe(_ => {
+        this._notify.info('You asked a question!');
+        this.fetchUserDetails();
+        this.closeButtonEl.nativeElement.click();
       },
         err => {
-          console.log(err);
+          this._notify.error(err);
         })
   }
 
