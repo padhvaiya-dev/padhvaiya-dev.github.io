@@ -5,10 +5,6 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AlertService } from '../services/alert.service';
 
 
-@Directive({ selector: 'question-settings' })
-export class QuestionSettings {
-  @Input() id !: string;
-}
 
 class ImageSnippet {
   constructor(public src: string, public file: File) { }
@@ -21,11 +17,12 @@ class ImageSnippet {
 })
 export class UserProfileComponent implements OnInit {
 
-  currentUser = {};
+  currentUser: any;
   askQuestionForm: FormGroup
   isFirstActive: boolean = true;
   selectedFile: ImageSnippet;
   isDisabled: boolean = false;
+
 
   @ViewChild('quesTab', { static: false }) public quesTabEl: ElementRef;
   @ViewChild('ansTab', { static: false }) public ansTabEl: ElementRef;
@@ -97,6 +94,7 @@ export class UserProfileComponent implements OnInit {
             this._stateService.userState.answerList = respObj['answers'];
             this._stateService.userState.questionsCount = respObj['questions'].length;
             this._stateService.userState.answersCount = respObj['answers'].length;
+            this.currentUser = this._stateService.userState;
           }, err => {
             this._notify.error(err);
           })

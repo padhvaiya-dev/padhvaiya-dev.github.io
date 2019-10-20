@@ -52,7 +52,7 @@
                                     </span>
                                 </div>
                             </div>
-                            <div class="ed-opts" *ngIf="answer.userId == _stateService.userState.userId">
+                            <div class="ed-opts" *ngIf="answer.userId == currentUserId">
                                 <button class="btn btn-danger btn-sm" (click)="deleteAnswer(answer.id)">Delete</button>
                             </div>
                         </div>

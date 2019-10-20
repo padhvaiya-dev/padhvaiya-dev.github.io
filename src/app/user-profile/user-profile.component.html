@@ -56,7 +56,7 @@
                                 </div>
                                 <!--star-descp end-->
                                 <div class="tab-feed"
-                                    *ngIf="_stateService.userState.questionList.length > 0 || _stateService.userState.answerList.length > 0 ; else askQuestion">
+                                    *ngIf="currentUser.questionList.length > 0 || currentUser.answerList.length > 0 ; else askQuestion">
                                     <ul>
                                         <li data-tab="feed-dd" class="active"
                                             (click)="onToggleQuestionAnswer('quesTab')" #quesTab>
@@ -122,7 +122,7 @@
                             </div>
                             <!--user-tab-sec end-->
                             <div class="product-feed-tab current" id="feed-dd" #userTab>
-                                <div class="post-bar" *ngFor="let question of _stateService.userState.questionList">
+                                <div class="post-bar" *ngFor="let question of currentUser.questionList">
                                     <div class="post_topbar">
                                         <div class="usy-dt">
                                             <img src="assets/images/cmp-icon6.png" width="35" height="35">
@@ -151,7 +151,7 @@
                             </div>
                             <!--product-feed-tab end-->
                             <div class="product-feed-tab" id="info-dd" #productTab>
-                                <div class="post-bar" *ngFor="let answer of _stateService.userState.answerList">
+                                <div class="post-bar" *ngFor="let answer of currentUser.answerList">
                                     <div class="post_topbar">
                                         <div class="usy-dt">
                                             <img src="assets/images/cmp-icon6.png" width="35" height="35">

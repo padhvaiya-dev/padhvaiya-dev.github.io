@@ -18,6 +18,7 @@ export class QuestionDetailComponent implements OnInit {
   answerCount: number;
   answerList: Array<object>;
   answerForm: FormGroup
+  currentUserId: number;
   @ViewChild('closeButton', { static: false }) public closeButtonEl: ElementRef;
   constructor(
     private _route: ActivatedRoute,
@@ -29,6 +30,7 @@ export class QuestionDetailComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.currentUserId = this._stateService.userState.userId;
     this.questionId = +this._route.snapshot.paramMap.get('id');
     this.fetchQuestionById(this.questionId);
     this.fetchAnswersByQuestion(this.questionId);
