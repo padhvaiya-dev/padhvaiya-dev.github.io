@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl:'https://apiUrl.com/api/'
+  apiUrl:'https://api-padhvaiya.herokuapp.com'
 };
