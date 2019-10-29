@@ -16,6 +16,8 @@ export class NavbarComponent implements OnInit {
   @ViewChild('userSettings', { static: true }) private userSettingsEl: ElementRef;
   @ViewChild('quesTab', { static: false }) public quesTabEl: ElementRef;
   @ViewChild('ansTab', { static: false }) public ansTabEl: ElementRef;
+  @ViewChild('closeButton', { static: true }) public closeButton: ElementRef;
+
   askQuestionForm: FormGroup
   userLoggedIn: string = 'Guest';
   constructor(
@@ -38,15 +40,29 @@ export class NavbarComponent implements OnInit {
   }
 
   onNewQuestionSubmit() {
-    const userId: number = this._stateService.userState.userId;
-    if (!this.askQuestionForm.valid) this._notify.warning('Question cannot be empty');
+    const userId: string = this._dataService.currentUserValue._id;
+    if (!this.askQuestionForm.valid) this._notify.warning('Answer cannot be empty');
     this._dataService.createQuestionByUser(this.askQuestionForm.value, userId)
-      .subscribe(respObj => {
-        console.log(respObj);
+      .subscribe(_ => {
+        this._notify.success('You asked a question!');
+        this.closeButton.nativeElement.click();
+        this.fetchAllQuestions();
       },
         err => {
-          console.log(err);
+          this._notify.error(err);
         })
+  }
+
+  fetchAllQuestions() {
+    this._dataService.fetchQuestions()
+      .subscribe(
+        respObj => {
+          this._stateService.questionDetailState.questionList = respObj;
+        },
+        err => {
+          this._notify.error(err);
+        }
+      )
   }
 
   onToggleProfile() {

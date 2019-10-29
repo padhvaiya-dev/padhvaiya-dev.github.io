@@ -1,0 +1,9 @@
+<form (ngSubmit)="hit();">
+    <div class="form-group">
+        <label for="desc"></label>
+        <input type="text" class="form-control" name="desc" [(ngModel)]="desc" id="desc"
+            aria-describedby="desc" placeholder="Your ques goes here...">
+        <input type="file" (change)="fileUpload($event);" enctype="multipart/form-data">
+    </div>
+    <button class="btn btn-primary" type="submit">Submit</button>
+</form>

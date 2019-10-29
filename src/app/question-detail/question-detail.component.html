@@ -6,6 +6,7 @@
                 <div class="col-lg-4"></div>
                 <div class="col-lg-6">
                     <p class="h3">{{questionDesc}}</p>
+                    <p class="h6">asked by - {{userName}}</p>
                     <hr />
                     <div class="d-flex justify-content-between mb-3">
                         <p class="h5">{{answerCount}} answer(s)</p>
@@ -19,7 +20,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h3 class="modal-title" id="exampleModalLabel">Write an Answer</h3>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeButton>
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -45,15 +46,15 @@
                             <div class="usy-dt">
                                 <img src="assets/images/cmp-icon6.png" width="35" height="35">
                                 <div class="usy-name">
-                                    <h3>Answer creator</h3>
+                                    <h3>{{ answer?.userId?.first_name + " "+ answer?.userId?.last_name }}</h3>
                                     <span>
                                         <img src="assets/images/clock.png">
-                                        3 min ago
+                                        {{answer.createdAt | date:'longDate'}}
                                     </span>
                                 </div>
                             </div>
-                            <div class="ed-opts" *ngIf="answer.userId == _stateService.userState.userId">
-                                <button class="btn btn-danger btn-sm" (click)="deleteAnswer(answer.id)">Delete</button>
+                            <div class="ed-opts" *ngIf="answer?.userId?._id == userId">
+                                <button class="btn btn-danger btn-sm" (click)="deleteAnswer(answer._id)">Delete</button>
                             </div>
                         </div>
                         <div class="job_descp">

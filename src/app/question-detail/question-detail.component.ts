@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../services/data.service';
 import { AlertService } from '../services/alert.service';
@@ -12,13 +12,14 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./question-detail.component.css']
 })
 export class QuestionDetailComponent implements OnInit {
-
-  questionId: number;
+  userId: string;
+  userName: string;
+  questionId: string;
   questionDesc: string;
   answerCount: number;
   answerList: Array<object>;
   answerForm: FormGroup
-
+  @ViewChild('closeButton', {static:true}) public closeButton: ElementRef;
   constructor(
     private _route: ActivatedRoute,
     private _dataService: DataService,
@@ -26,24 +27,39 @@ export class QuestionDetailComponent implements OnInit {
     private _stateService: StateService,
     private _fb: FormBuilder,
 
-  ) { }
+  ) {
+    this.userId = JSON.parse(localStorage.getItem('currentUser'))._id;
+    this.questionId = this._route.snapshot.paramMap.get('id').toString();
+    this.fetchQuestionById(this.questionId);
+  }
 
   ngOnInit() {
-    this.questionId = +this._route.snapshot.paramMap.get('id');
-    this.fetchQuestionById(this.questionId);
     this.fetchAnswersByQuestion(this.questionId);
     this.answerForm = this._fb.group({
       desc: ['', [Validators.required]]
     })
   }
 
-  fetchAnswersByQuestion(id: number) {
+  fetchQuestionById(id: string) {
+    this._dataService.fetchQuestionById(id)
+      .subscribe(
+        respObj => {
+          this._stateService.questionDetailState.questionDesc = respObj['desc'];
+          this.questionDesc = respObj['desc'];
+          this.userName = respObj['userId']['first_name'].concat(' ').concat(respObj['userId']['last_name']);
+        },
+        err => {
+          this._notify.error(err);
+        }
+      )
+  }
+
+  fetchAnswersByQuestion(id: string) {
     this._dataService.fetchAnswersByQuestionId(id)
       .subscribe(
         respObj => {
-          this._stateService.questionDetailState.questionId = this.questionId;
           this._stateService.questionDetailState.answerList = respObj;
-          this.answerList = this._stateService.questionDetailState.answerList;
+          this.answerList = respObj;
           this.answerCount = this._stateService.questionDetailState.answerList.length;
         },
         err => {
@@ -52,38 +68,29 @@ export class QuestionDetailComponent implements OnInit {
       )
   }
 
-  fetchQuestionById(id: number) {
-    this._dataService.fetchQuestionById(id)
-      .subscribe(
-        respObj => {
-          this._stateService.questionDetailState.questionDesc = respObj['desc'];
-          this.questionDesc = respObj['desc'];
-        },
-        err => {
-          this._notify.error(err);
-        }
-      )
-  }
+
 
   onNewAnswerSubmit() {
-    const userId: number = this._stateService.userState.userId;
     if (!this.answerForm.valid) this._notify.warning('Answer cannot be empty');
-    this._dataService.createAnswerByUserAndQuestion(this.answerForm.value, userId, this.questionId)
+    this._dataService.createAnswerByUserAndQuestion(this.answerForm.value, this.userId, this.questionId)
       .subscribe(_ => {
         this._notify.success('You wrote an answer!');
+        this.closeButton.nativeElement.click();
+        this.fetchAnswersByQuestion(this.questionId);
       },
         err => {
           this._notify.error(err);
         })
   }
 
-  deleteAnswer(id: number){
+  deleteAnswer(id: string) {
     this._dataService.deleteAnswerById(id)
-      .subscribe(_=>{
-        this.fetchAnswersByQuestion(this.questionId);      },
-      err=>{
-        this._notify.error(err)
-      })
+      .subscribe(_ => {
+        this.fetchAnswersByQuestion(this.questionId);
+      },
+        err => {
+          this._notify.error(err)
+        })
   }
 
 }

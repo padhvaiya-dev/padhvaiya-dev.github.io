@@ -7,6 +7,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
+import { FileUploadComponent } from './file-upload/file-upload.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -16,7 +17,8 @@ const routes: Routes = [
   { path: 'about-us', canActivate: [AuthGuard], component: AboutUsComponent },
   { path: 'profile', canActivate: [AuthGuard], component: UserProfileComponent },
   { path: 'profile', canActivate: [AuthGuard], component: UserProfileComponent },
-  { path: 'questions/:id', canActivate: [AuthGuard], component: QuestionDetailComponent }
+  { path: 'questions/:id', canActivate: [AuthGuard], component: QuestionDetailComponent },
+  { path: 'files', component: FileUploadComponent }
 ];
 
 @NgModule({

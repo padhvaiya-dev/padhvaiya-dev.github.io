@@ -21,7 +21,8 @@ export class StateService {
   questionDetailState = {
     questionId: null,
     answerList: null,
-    questionDesc: ''
+    questionList: null,
+    questionDesc: null
   }
 
 }

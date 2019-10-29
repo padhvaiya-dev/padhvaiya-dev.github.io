@@ -35,7 +35,7 @@ export class UserProfileComponent implements OnInit {
   @ViewChild('questionBox', { static: true }) public questionBox: ElementRef;
 
   constructor(
-    private _datatService: DataService,
+    private _dataService: DataService,
     private _stateService: StateService,
     private _renderer: Renderer2,
     private _fb: FormBuilder,
@@ -43,7 +43,7 @@ export class UserProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fetchUserDetails();
+  //  this.fetchUserDetails();
     this.currentUser = this._stateService.userState;
     this.askQuestionForm = this._fb.group({
       desc: ['', [Validators.required]]
@@ -51,19 +51,19 @@ export class UserProfileComponent implements OnInit {
   }
 
   deleteQuestion(id: number) {
-    this._datatService.deleteQuestionById(id)
+    this._dataService.deleteQuestionById(id)
       .subscribe(_ => {
-        this.fetchUserDetails();
+     //   this.fetchUserDetails();
       },
         err => {
           this._notify.error(err);
         })
   }
 
-  deleteAnswer(id: number){
-    this._datatService.deleteAnswerById(id)
+  deleteAnswer(id: string){
+    this._dataService.deleteAnswerById(id)
       .subscribe(_=>{
-        this.fetchUserDetails();
+       // this.fetchUserDetails();
       },
       err=>{
         this._notify.error(err)
@@ -72,11 +72,11 @@ export class UserProfileComponent implements OnInit {
 
   onNewQuestionSubmit() {
     this._renderer.removeClass(this.questionBox.nativeElement, 'show');
-    const userId: number = this._stateService.userState.userId;
+    const userId: string = this._dataService.currentUserValue._id;
     if (!this.askQuestionForm.valid) this._notify.warning('Question cannot be empty');
-    this._datatService.createQuestionByUser(this.askQuestionForm.value, userId)
+    this._dataService.createQuestionByUser(this.askQuestionForm.value, userId)
       .subscribe(respObj => {
-        this.fetchUserDetails();
+      //  this.fetchUserDetails();
         this.questionBox.nativeElement.style.display = 'None';
       },
         err => {
@@ -84,7 +84,7 @@ export class UserProfileComponent implements OnInit {
         })
   }
 
-  fetchUserDetails() {
+  /* fetchUserDetails() {
     this._datatService.fetchLoggedInUserId()
       .subscribe(respObj => {
         const userId: number = respObj['id'];
@@ -105,14 +105,14 @@ export class UserProfileComponent implements OnInit {
         err => {
           this._notify.error(err)
         })
-  }
+  } */
 
   processFile(imageInput: any) {
     const file: File = imageInput.files[0];
     const reader = new FileReader();
     reader.addEventListener('load', (event: any) => {
       this.selectedFile = new ImageSnippet(event.target.result, file);
-      this._datatService.updateCoverImage(this.selectedFile.file).subscribe(
+      this._dataService.updateCoverImage(this.selectedFile.file).subscribe(
         res => {
 
         },
