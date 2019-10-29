@@ -15,10 +15,8 @@ const routes: Routes = [
   { path: 'dashboard', canActivate: [AuthGuard], component: DashboardComponent },
   { path: 'contact-us', canActivate: [AuthGuard], component: ContactUsComponent },
   { path: 'about-us', canActivate: [AuthGuard], component: AboutUsComponent },
-  { path: 'profile', canActivate: [AuthGuard], component: UserProfileComponent },
-  { path: 'profile', canActivate: [AuthGuard], component: UserProfileComponent },
+  { path: 'user/:id', canActivate: [AuthGuard], component: UserProfileComponent },
   { path: 'questions/:id', canActivate: [AuthGuard], component: QuestionDetailComponent },
-  { path: 'files', component: FileUploadComponent }
 ];
 
 @NgModule({

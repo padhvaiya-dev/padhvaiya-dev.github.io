@@ -5,7 +5,7 @@
             <div class="row mt-5">
                 <div class="col-lg-4">
                     <p class="h3">{{questionDesc}}</p>
-                    <p class="h6">asked by - {{userName}}</p>
+                    <p class="h6">asked by - <a routerLink="../../user/{{userId}}">{{userName}}</a></p>
                     <hr />
                 </div>
                 <div class="col-lg-9" *ngIf="questionImgRef">
@@ -55,10 +55,10 @@
                             <div class="usy-dt">
                                 <img src="assets/images/cmp-icon6.png" width="35" height="35">
                                 <div class="usy-name">
-                                    <h3>{{ answer?.userId?.first_name + " "+ answer?.userId?.last_name }}</h3>
+                                    <a routerLink="/user/{{answer?.userId?._id}}" style="text-decoration: underline"><h3>{{ answer?.userId?.first_name + " "+ answer?.userId?.last_name }}</h3></a>
                                     <span>
                                         <img src="assets/images/clock.png">
-                                        {{answer.createdAt | date:'longDate'}}
+                                        {{answer?.createdAt | date:'longDate'}}
                                     </span>
                                 </div>
                             </div>
@@ -67,7 +67,7 @@
                             </div>
                         </div>
                         <div class="job_descp">
-                            <h3>{{answer.desc}}</h3>
+                            <h3>{{answer?.desc}}</h3>
                             <img src='{{hostName + answer?.imgRef}}' width="1030" height="350">
                         </div>
                     </div>

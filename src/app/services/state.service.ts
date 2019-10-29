@@ -14,8 +14,8 @@ export class StateService {
     email: '',
     questionsCount: 0,
     answersCount: 0,
-    questionList: [],
-    answerList:[]
+    questionList: null,
+    answerList:null
   }
 
   questionDetailState = {

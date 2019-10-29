@@ -73,7 +73,7 @@ export class DataService {
       .pipe(catchError(this.handleError))
   }
 
-  fetchUserById(id: number) {
+  fetchUserById(id: string) {
     return this._http.get<any>(environment.apiUrl + '/users/' + id)
       .pipe(catchError(this.handleError))
   }
@@ -83,8 +83,18 @@ export class DataService {
       .pipe(catchError(this.handleError))
   }
 
+  fetchAnswersByUser(userId: string){
+    return this._http.get(environment.apiUrl + '/answers/user/' + userId)
+      .pipe(catchError(this.handleError));
+  }
+
   fetchQuestionById(questionId: string) {
     return this._http.get(environment.apiUrl + '/questions/' + questionId)
+      .pipe(catchError(this.handleError));
+  }
+
+  fetchQuestionsByUser(userId: string){
+    return this._http.get(environment.apiUrl + '/questions/user/' + userId)
       .pipe(catchError(this.handleError));
   }
 
@@ -142,7 +152,6 @@ export class DataService {
     if (error.error instanceof ErrorEvent) {
       return throwError(error.error.message);
     } else {
-      console.log('fgfgfg', error);
       return throwError(error.error.error)
     }
   };
