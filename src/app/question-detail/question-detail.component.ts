@@ -4,6 +4,7 @@ import { DataService } from '../services/data.service';
 import { AlertService } from '../services/alert.service';
 import { StateService } from '../services/state.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -12,14 +13,17 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./question-detail.component.css']
 })
 export class QuestionDetailComponent implements OnInit {
+  questionImgRef: string;
+  hostName: string;
   userId: string;
   userName: string;
   questionId: string;
   questionDesc: string;
   answerCount: number;
   answerList: Array<object>;
-  answerForm: FormGroup
-  @ViewChild('closeButton', {static:true}) public closeButton: ElementRef;
+  answerForm: FormGroup;
+  imgFile: File;
+  @ViewChild('closeButton', { static: true }) public closeButton: ElementRef;
   constructor(
     private _route: ActivatedRoute,
     private _dataService: DataService,
@@ -28,6 +32,7 @@ export class QuestionDetailComponent implements OnInit {
     private _fb: FormBuilder,
 
   ) {
+    this.hostName = environment.apiUrl;
     this.userId = JSON.parse(localStorage.getItem('currentUser'))._id;
     this.questionId = this._route.snapshot.paramMap.get('id').toString();
     this.fetchQuestionById(this.questionId);
@@ -46,6 +51,8 @@ export class QuestionDetailComponent implements OnInit {
         respObj => {
           this._stateService.questionDetailState.questionDesc = respObj['desc'];
           this.questionDesc = respObj['desc'];
+          this.questionImgRef = respObj['imgRef'];
+          console.log(this.questionImgRef);
           this.userName = respObj['userId']['first_name'].concat(' ').concat(respObj['userId']['last_name']);
         },
         err => {
@@ -72,7 +79,7 @@ export class QuestionDetailComponent implements OnInit {
 
   onNewAnswerSubmit() {
     if (!this.answerForm.valid) this._notify.warning('Answer cannot be empty');
-    this._dataService.createAnswerByUserAndQuestion(this.answerForm.value, this.userId, this.questionId)
+    this._dataService.createAnswerByUserAndQuestion(this.answerForm.value, this.userId, this.questionId, this.imgFile)
       .subscribe(_ => {
         this._notify.success('You wrote an answer!');
         this.closeButton.nativeElement.click();
@@ -81,6 +88,10 @@ export class QuestionDetailComponent implements OnInit {
         err => {
           this._notify.error(err);
         })
+  }
+
+  fileUpload(event) {
+    this.imgFile = event.target.files[0];
   }
 
   deleteAnswer(id: string) {

@@ -18,6 +18,7 @@ export class NavbarComponent implements OnInit {
   @ViewChild('ansTab', { static: false }) public ansTabEl: ElementRef;
   @ViewChild('closeButton', { static: true }) public closeButton: ElementRef;
 
+  imgFile: File;
   askQuestionForm: FormGroup
   userLoggedIn: string = 'Guest';
   constructor(
@@ -42,7 +43,7 @@ export class NavbarComponent implements OnInit {
   onNewQuestionSubmit() {
     const userId: string = this._dataService.currentUserValue._id;
     if (!this.askQuestionForm.valid) this._notify.warning('Answer cannot be empty');
-    this._dataService.createQuestionByUser(this.askQuestionForm.value, userId)
+    this._dataService.createQuestionByUser(this.askQuestionForm.value, userId, this.imgFile)
       .subscribe(_ => {
         this._notify.success('You asked a question!');
         this.closeButton.nativeElement.click();
@@ -63,6 +64,10 @@ export class NavbarComponent implements OnInit {
           this._notify.error(err);
         }
       )
+  }
+
+  fileUpload(event) {
+    this.imgFile = event.target.files[0];
   }
 
   onToggleProfile() {

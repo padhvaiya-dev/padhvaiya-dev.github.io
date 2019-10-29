@@ -88,17 +88,22 @@ export class DataService {
       .pipe(catchError(this.handleError));
   }
 
-  createQuestionByUser(questionPayload: object, userId: string) {
-    questionPayload['userId'] = userId
-    console.log(questionPayload);
-    return this._http.post(environment.apiUrl + '/questions', questionPayload)
+  createQuestionByUser(questionPayload: object, userId: string, imageFile?: File) {
+    const formData = new FormData();
+    formData.append('desc', questionPayload['desc']);
+    formData.append('userId', userId)
+    formData.append('file', imageFile);
+    return this._http.post(environment.apiUrl + '/questions', formData)
       .pipe(catchError(this.handleError))
   }
 
-  createAnswerByUserAndQuestion(answerPayload: object, userId: string, questionId: string) {
-    answerPayload['userId'] = userId;
-    answerPayload['questionId'] = questionId;
-    return this._http.post(environment.apiUrl + '/answers/', answerPayload)
+  createAnswerByUserAndQuestion(answerPayload: object, userId: string, questionId: string, imageFile?: File) {
+    const formData = new FormData();
+    formData.append('desc', answerPayload['desc']);
+    formData.append('userId', userId);
+    formData.append('questionId', questionId);
+    formData.append('file', imageFile);
+    return this._http.post(environment.apiUrl + '/answers/', formData)
       .pipe(catchError(this.handleError))
   }
 
