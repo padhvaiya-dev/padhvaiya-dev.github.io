@@ -16,7 +16,6 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/auth-interceptor';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
-import { FileUploadComponent } from './file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -27,8 +26,7 @@ import { FileUploadComponent } from './file-upload/file-upload.component';
     ContactUsComponent,
     AboutUsComponent,
     UserProfileComponent,
-    QuestionDetailComponent,
-    FileUploadComponent
+    QuestionDetailComponent
   ],
   imports: [
     BrowserModule,

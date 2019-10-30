@@ -16,7 +16,7 @@ import { environment } from '../../environments/environment';
 export class UserProfileComponent implements OnInit {
 
   imgFile: File;
-  currentUser = {};
+  currentUser: any;
   askQuestionForm: FormGroup
   isFirstActive: boolean = true;
   isDisabled: boolean = false;

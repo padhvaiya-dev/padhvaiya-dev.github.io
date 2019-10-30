@@ -7,7 +7,6 @@ import { AuthGuard } from './guards/auth.guard';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
-import { FileUploadComponent } from './file-upload/file-upload.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
