@@ -84,7 +84,7 @@
                         </div>
                     </li> -->
                     <li>
-                        <button type="button" class="btn btn-primary btn-lg ml-5" data-toggle="modal"
+                        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
                             data-target="#exampleModal">
                             Ask a question
                         </button>
@@ -129,10 +129,9 @@
             </div>
             <!--menu-btn end-->
             <div class="user-account" style="cursor: pointer" (click)="onToggleProfile()">
-                <div class="user-info">
-                    <img src="assets/images/icon1.png" alt="">
-                    <p style="color: #fff">{{userLoggedIn}}</p>
-                    <i class="la la-sort-down"></i>
+                <div class="user-info" class="mt-3 pt-1">
+                    <p style="color: #fff">{{userName}} <i class="la la-sort-down"></i></p>
+                   
                 </div>
                 <div class="user-account-settingss" #userSettings>
                     <h3 class="tc"><a routerLink="/user/{{userId}}" title="">View Profile</a></h3>

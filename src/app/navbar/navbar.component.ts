@@ -19,9 +19,9 @@ export class NavbarComponent implements OnInit {
   @ViewChild('closeButton', { static: true }) public closeButton: ElementRef;
 
   userId: string;
+  userName: string;
   imgFile: File;
   askQuestionForm: FormGroup
-  userLoggedIn: string = 'Guest';
   constructor(
     private _dataService: DataService,
     private _renderer: Renderer2,
@@ -32,7 +32,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.userId = JSON.parse(localStorage.getItem('currentUser'))._id;
-    this.userLoggedIn = localStorage.getItem('loggedInUser');
+    this.userName = JSON.parse(localStorage.getItem('currentUser')).first_name;
     this.askQuestionForm = this._fb.group({
       desc: ['', [Validators.required]]
     })

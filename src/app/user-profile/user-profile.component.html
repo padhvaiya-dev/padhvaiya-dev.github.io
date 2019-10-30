@@ -2,7 +2,7 @@
 <input style="display: none" type="file" (change)="changePicture($event,'cover')" #coverImage
     enctype="multipart/form-data">
 <section class="cover-sec" style="cursor: pointer">
-    <img src="{{coverImg}}" alt="" [(ngModel)]="coverImg" (click)="coverImage.click()" width="1600" height="400">
+    <img src="{{coverImg}}" alt="" (click)="coverImage.click()" width="1600" height="400">
 </section>
 <main>
     <div class="main-section">
@@ -15,7 +15,7 @@
                                 <div class="user-pro-img" style="cursor: pointer">
                                     <input style="display: none" type="file" (change)="changePicture($event,'profile')"
                                         #profileImage enctype="multipart/form-data">
-                                    <img src="{{profileImg}}" alt="" [(ngModel)]="profileImg" (click)="profileImage.click()" width="170" height="170">
+                                    <img src="{{profileImg}}" alt="" (click)="profileImage.click()" width="170" height="170">
                                 </div>
                                 <!--user-pro-img end-->
                                 <div class="user_pro_status">
