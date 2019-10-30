@@ -25,6 +25,7 @@ export class UserProfileComponent implements OnInit {
   profileImg: string;
   coverImg: string;
 
+
   @ViewChild('quesTab', { static: false }) public quesTabEl: ElementRef;
   @ViewChild('ansTab', { static: false }) public ansTabEl: ElementRef;
   @ViewChild('userTab', { static: true }) public userTabEl: ElementRef;
