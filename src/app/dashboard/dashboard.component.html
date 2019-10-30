@@ -2,11 +2,7 @@
 <div class="search-sec">
     <div class="container">
         <div class="search-box">
-<<<<<<< HEAD
-                <input type="text" placeholder="Enter your questions  here..." [(ngModel)]="searchTerm">
-=======
             <input type="text" [(ngModel)]="searchTerm" placeholder="Enter your questions  here...">
->>>>>>> dev
         </div>
     </div>
 </div>
@@ -15,13 +11,8 @@
         <div class="main-section-data">
             <div class="row mt-5 d-flex justify-content-center">
                 <div class="col-lg-3"></div>
-<<<<<<< HEAD
-                <div class="col-lg-6">
-                    <div class="post-bar" *ngFor="let question of questionList|filter:searchTerm">
-=======
                 <div class="col-lg-6" *ngIf="questionList?.length > 0; else noData">
                     <div class="post-bar" *ngFor="let question of questionList | filter:searchTerm">
->>>>>>> dev
                         <div class="post_topbar">
                             <div class="usy-dt">
                                 <img src="assets/images/cmp-icon6.png" width="35" height="35">

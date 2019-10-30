@@ -65,30 +65,10 @@ export class UserProfileComponent implements OnInit {
         })
   }
 
-<<<<<<< HEAD
-  deleteAnswer(id: number){
-    this._datatService.deleteAnswerById(id)
-      .subscribe(_=>{
-        this.fetchUserDetails();
-      },
-      err=>{
-        this._notify.error(err)
-      })
-  }
-
-  onNewQuestionSubmit() {
-    const userId: number = this._stateService.userState.userId;
-    if (!this.askQuestionForm.valid) return this._notify.warning('Question cannot be empty');
-    this._datatService.createQuestionByUser(this.askQuestionForm.value, userId)
-      .subscribe(_ => {
-        this.fetchUserDetails();
-        this.closeButtonEl.nativeElement.click();
-=======
   deleteAnswer(id: string) {
     this._dataService.deleteAnswerById(id)
       .subscribe(_ => {
         this.fetchAnswersByUser();
->>>>>>> dev
       },
         err => {
           this._notify.error(err)

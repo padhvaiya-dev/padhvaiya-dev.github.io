@@ -22,14 +22,9 @@ export class QuestionDetailComponent implements OnInit {
   questionDesc: string;
   answerCount: number;
   answerList: Array<object>;
-<<<<<<< HEAD
-  answerForm: FormGroup
-  @ViewChild('closeButton', { static: false }) public closeButtonEl: ElementRef;
-=======
   answerForm: FormGroup;
   imgFile: File;
   @ViewChild('closeButton', { static: true }) public closeButton: ElementRef;
->>>>>>> dev
   constructor(
     private _route: ActivatedRoute,
     private _dataService: DataService,
@@ -88,13 +83,8 @@ export class QuestionDetailComponent implements OnInit {
     this._dataService.createAnswerByUserAndQuestion(this.answerForm.value, this.loggenInUser, this.questionId, this.imgFile)
       .subscribe(_ => {
         this._notify.success('You wrote an answer!');
-<<<<<<< HEAD
-        this.fetchAnswersByQuestion(this.questionId);
-        this.closeButtonEl.nativeElement.click();
-=======
         this.closeButton.nativeElement.click();
         this.fetchAnswersByQuestion(this.questionId);
->>>>>>> dev
       },
         err => {
           this._notify.error(err);

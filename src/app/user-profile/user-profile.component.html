@@ -143,13 +143,9 @@
                                         </div>
                                     </div>
                                     <div class="job_descp">
-<<<<<<< HEAD
-                                        <a routerLink="../questions/{{question.id}}"><h3 style="text-decoration: underline">{{question.desc}}</h3></a>
-=======
                                         <a routerLink="../../questions/{{question._id}}">
                                             <h3>{{question.desc}}</h3>
                                         </a>
->>>>>>> dev
                                         <div *ngIf="question?.answers?.length == 0; else hasAns">
                                             No Answer
                                         </div>
