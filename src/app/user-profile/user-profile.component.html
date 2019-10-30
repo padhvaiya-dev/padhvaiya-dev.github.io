@@ -1,7 +1,8 @@
 <app-navbar></app-navbar>
-<input style="display: none" type="file" (change)="processFile(imageInput)" #imageInput accept="image/*">
+<input style="display: none" type="file" (change)="changePicture($event,'cover')" #coverImage
+    enctype="multipart/form-data">
 <section class="cover-sec" style="cursor: pointer">
-    <img src="http://via.placeholder.com/1600x400" alt="" (click)="imageInput.click()">
+    <img src="{{coverImg}}" alt="" (click)="coverImage.click()" width="1600" height="400">
 </section>
 <main>
     <div class="main-section">
@@ -11,8 +12,10 @@
                     <div class="col-lg-4">
                         <div class="main-left-sidebar">
                             <div class="user_profile">
-                                <div class="user-pro-img">
-                                    <img src="http://via.placeholder.com/170x170" alt="">
+                                <div class="user-pro-img" style="cursor: pointer">
+                                    <input style="display: none" type="file" (change)="changePicture($event,'profile')"
+                                        #profileImage enctype="multipart/form-data">
+                                    <img src="{{profileImg}}" alt="" (click)="profileImage.click()" width="170" height="170">
                                 </div>
                                 <!--user-pro-img end-->
                                 <div class="user_pro_status">
@@ -50,13 +53,13 @@
                     <div class="col-lg-6">
                         <div class="main-ws-sec">
                             <div class="user-tab-sec">
-                                <h3>{{currentUser.firstName + ' ' + currentUser.lastName }}</h3>
+                                <h3>{{currentUser?.firstName + ' ' + currentUser?.lastName }}</h3>
                                 <div class="star-descp">
-                                    <p class="h6">{{currentUser.email}}</p>
+                                    <p class="h6">{{currentUser?.email}}</p>
                                 </div>
                                 <!--star-descp end-->
                                 <div class="tab-feed"
-                                    *ngIf="_stateService.userState.questionList.length > 0 || _stateService.userState.answerList.length > 0 ; else askQuestion">
+                                    *ngIf="_stateService?.userState?.questionList?.length > 0 || _stateService?.userState?.answerList?.length > 0 ; else askQuestion">
                                     <ul>
                                         <li data-tab="feed-dd" class="active"
                                             (click)="onToggleQuestionAnswer('quesTab')" #quesTab>
@@ -73,7 +76,7 @@
                                         </li>
                                     </ul>
                                 </div><!-- tab-feed end-->
-                                <ng-template #askQuestion>
+                                <ng-template #askQuestion *ngIf="userId === loggedInUser">
 
                                     <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
                                         data-target="#dashModal">
@@ -98,8 +101,7 @@
                                                         <div class="form-group">
                                                             <label for="desc"></label>
                                                             <input type="text" class="form-control"
-                                                                formControlName="desc" id="desc"
-                                                                aria-describedby="desc"
+                                                                formControlName="desc" id="desc" aria-describedby="desc"
                                                                 placeholder="Enter your question">
                                                         </div>
                                                         <!--  <div class="form-group">
@@ -112,8 +114,8 @@
                                                     </form>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal" #closeQuestionBox>Close</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                                        #closeQuestionBox>Close</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -122,24 +124,32 @@
                             </div>
                             <!--user-tab-sec end-->
                             <div class="product-feed-tab current" id="feed-dd" #userTab>
-                                <div class="post-bar" *ngFor="let question of _stateService.userState.questionList">
+                                <div class="post-bar" *ngFor="let question of _stateService?.userState?.questionList">
                                     <div class="post_topbar">
                                         <div class="usy-dt">
                                             <img src="assets/images/cmp-icon6.png" width="35" height="35">
                                             <div class="usy-name">
-                                                <h3>Question creator</h3>
+                                                <h3>{{question?.userId.first_name + " "+ question?.userId.last_name}}
+                                                </h3>
                                                 <span>
                                                     <img src="assets/images/clock.png">
-                                                    3 min ago
+                                                    {{question?.createdAt | date:'longDate'}}
                                                 </span>
-                                            </div>  
+                                            </div>
                                         </div>
-                                        <div class="ed-opts">
-                                           <button class="btn btn-danger btn-sm" (click)="deleteQuestion(question.id)">Delete</button>
+                                        <div class="ed-opts" *ngIf="userId === loggedInUser">
+                                            <button class="btn btn-danger btn-sm"
+                                                (click)="deleteQuestion(question._id)">Delete</button>
                                         </div>
                                     </div>
                                     <div class="job_descp">
+<<<<<<< HEAD
                                         <a routerLink="../questions/{{question.id}}"><h3 style="text-decoration: underline">{{question.desc}}</h3></a>
+=======
+                                        <a routerLink="../../questions/{{question._id}}">
+                                            <h3>{{question.desc}}</h3>
+                                        </a>
+>>>>>>> dev
                                         <div *ngIf="question?.answers?.length == 0; else hasAns">
                                             No Answer
                                         </div>
@@ -151,20 +161,21 @@
                             </div>
                             <!--product-feed-tab end-->
                             <div class="product-feed-tab" id="info-dd" #productTab>
-                                <div class="post-bar" *ngFor="let answer of _stateService.userState.answerList">
+                                <div class="post-bar" *ngFor="let answer of _stateService?.userState?.answerList">
                                     <div class="post_topbar">
                                         <div class="usy-dt">
                                             <img src="assets/images/cmp-icon6.png" width="35" height="35">
                                             <div class="usy-name">
-                                                <h3>Answer creator</h3>
+                                                <h3>{{answer?.userId?.first_name + " "+ answer?.userId?.last_name}}</h3>
                                                 <span>
                                                     <img src="assets/images/clock.png">
-                                                    3 min ago
+                                                    {{answer?.createdAt | date:'longDate'}}
                                                 </span>
                                             </div>
                                         </div>
-                                        <div class="ed-opts">
-                                                <button class="btn btn-danger btn-sm" (click)="deleteAnswer(answer.id)">Delete</button>
+                                        <div class="ed-opts" *ngIf="userId === loggedInUser">
+                                            <button class="btn btn-danger btn-sm"
+                                                (click)="deleteAnswer(answer._id)">Delete</button>
                                         </div>
                                     </div>
                                     <div class="job_descp">

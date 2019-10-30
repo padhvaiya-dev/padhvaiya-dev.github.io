@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { catchError } from 'rxjs/internal/operators/catchError';
 import { environment } from '../../environments/environment';
-import { throwError, BehaviorSubject, Observable } from 'rxjs';
+import { throwError, BehaviorSubject, Observable, queueScheduler } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { User } from '../models/user';
-
 
 @Injectable({
   providedIn: 'root'
@@ -35,13 +34,21 @@ export class DataService {
 
   login = (userObj: object) => {
     const email: string = userObj['email'];
-    return this._http.post<any>(environment.apiUrl + '/users/login', userObj)
+    return this._http.post<any>(environment.apiUrl + '/auth/login', userObj)
       .pipe(
         catchError(this.handleError),
         map(user => {
           if (user && user.token) {
             localStorage.setItem('loggedInUser', email);
-            localStorage.setItem('currentUser', JSON.stringify(user));
+            localStorage.setItem('currentUser', JSON.stringify({
+              _id: user['_id'],
+              first_name: user['first_name'],
+              last_name: user['last_name'],
+              email: user['email'],
+              token: user['token'],
+              questions: user['questions'],
+              answers: user['answers']
+            }));
             this.currentUserSubject.next(user);
           }
           return user;
@@ -66,31 +73,47 @@ export class DataService {
       .pipe(catchError(this.handleError))
   }
 
-  fetchUserById(id: number) {
+  fetchUserById(id: string) {
     return this._http.get<any>(environment.apiUrl + '/users/' + id)
       .pipe(catchError(this.handleError))
   }
 
-  fetchAnswersByQuestionId(questionId: number) {
-    return this._http.get(environment.apiUrl + '/questions/' + questionId + '/answers')
+  fetchAnswersByQuestionId(questionId: string): Observable<any> {
+    return this._http.get(environment.apiUrl + '/answers/question/' + questionId)
       .pipe(catchError(this.handleError))
   }
 
-  fetchQuestionById(questionId: number) {
+  fetchAnswersByUser(userId: string){
+    return this._http.get(environment.apiUrl + '/answers/user/' + userId)
+      .pipe(catchError(this.handleError));
+  }
+
+  fetchQuestionById(questionId: string) {
     return this._http.get(environment.apiUrl + '/questions/' + questionId)
       .pipe(catchError(this.handleError));
   }
 
-  createQuestionByUser(questionPayload: object, userId: number) {
-    questionPayload['userId'] = userId
-    return this._http.post(environment.apiUrl + '/users/' + userId + '/questions', questionPayload)
+  fetchQuestionsByUser(userId: string){
+    return this._http.get(environment.apiUrl + '/questions/user/' + userId)
+      .pipe(catchError(this.handleError));
+  }
+
+  createQuestionByUser(questionPayload: object, userId: string, imageFile?: File) {
+    const formData = new FormData();
+    formData.append('desc', questionPayload['desc']);
+    formData.append('userId', userId)
+    formData.append('file', imageFile);
+    return this._http.post(environment.apiUrl + '/questions', formData)
       .pipe(catchError(this.handleError))
   }
 
-  createAnswerByUserAndQuestion(answerPayload: object, userId: number, questionId: number) {
-    answerPayload['userId'] = userId;
-    answerPayload['questionId'] = questionId;
-    return this._http.post(environment.apiUrl + '/questions/' + questionId + '/answers', answerPayload)
+  createAnswerByUserAndQuestion(answerPayload: object, userId: string, questionId: string, imageFile?: File) {
+    const formData = new FormData();
+    formData.append('desc', answerPayload['desc']);
+    formData.append('userId', userId);
+    formData.append('questionId', questionId);
+    formData.append('file', imageFile);
+    return this._http.post(environment.apiUrl + '/answers/', formData)
       .pipe(catchError(this.handleError))
   }
 
@@ -99,13 +122,13 @@ export class DataService {
       .pipe(catchError(this.handleError))
   }
 
-  deleteAnswerById(answerId: number) {
+  deleteAnswerById(answerId: string) {
     return this._http.delete(environment.apiUrl + '/answers/' + answerId)
       .pipe(catchError(this.handleError))
   }
 
-  searchByQuestion(searchQuery: string){
-    return this._http.get(environment.apiUrl+'/search')
+  searchByQuestion(searchQuery: string) {
+    return this._http.get(environment.apiUrl + '/search')
       .pipe(catchError(this.handleError));
   }
 
@@ -116,12 +139,21 @@ export class DataService {
       .pipe(catchError(this.handleError))
   }
 
+  changeImage(image: File, imageType: string, userId: string) {
+    const formData = new FormData();
+    formData.append('file', image);
+    formData.append('userId', userId);
+    formData.append('imageType', imageType);
+    return this._http.post(environment.apiUrl + '/files/changePicture', formData)
+      .pipe(catchError(this.handleError));
+  }
+
 
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       return throwError(error.error.message);
     } else {
-      return throwError(error.message)
+      return throwError(error.error.error)
     }
   };
 

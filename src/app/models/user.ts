@@ -1,15 +1,10 @@
 export class User {
-    firstName: string;
-    lastName: string;
+    _id: string;
+    first_name: string;
+    last_name: string;
     email: string;
-    password: string;
+    questions: Array<object>;
+    answers: Array<object>
     token: string
 }
 
-export interface loggedInUser{
-    firstName: string;
-    lastName: string;
-    email: string;
-    questionCount: number;
-    answerCount: number;
-}

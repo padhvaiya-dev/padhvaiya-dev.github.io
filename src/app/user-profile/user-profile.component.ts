@@ -3,16 +3,10 @@ import { DataService } from '../services/data.service';
 import { StateService } from '../services/state.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AlertService } from '../services/alert.service';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 
-@Directive({ selector: 'question-settings' })
-export class QuestionSettings {
-  @Input() id !: string;
-}
-
-class ImageSnippet {
-  constructor(public src: string, public file: File) { }
-}
 
 @Component({
   selector: 'app-user-profile',
@@ -21,11 +15,15 @@ class ImageSnippet {
 })
 export class UserProfileComponent implements OnInit {
 
+  imgFile: File;
   currentUser = {};
   askQuestionForm: FormGroup
   isFirstActive: boolean = true;
-  selectedFile: ImageSnippet;
   isDisabled: boolean = false;
+  userId: string;
+  loggedInUser: string;
+  profileImg: string;
+  coverImg: string;
 
   @ViewChild('quesTab', { static: false }) public quesTabEl: ElementRef;
   @ViewChild('ansTab', { static: false }) public ansTabEl: ElementRef;
@@ -35,15 +33,22 @@ export class UserProfileComponent implements OnInit {
   @ViewChild('closeButton', { static: false }) public closeButtonEl: ElementRef;
 
   constructor(
-    private _datatService: DataService,
-    private _stateService: StateService,
+    private _dataService: DataService,
+    public _stateService: StateService,
     private _renderer: Renderer2,
     private _fb: FormBuilder,
-    private _notify: AlertService
-  ) { }
+    private _notify: AlertService,
+    private _route: ActivatedRoute,
+
+  ) {
+    this.userId = this._route.snapshot.paramMap.get('id').toString();
+    this.loggedInUser = JSON.parse(localStorage.getItem('currentUser'))._id;
+    this.fetchUserDetails();
+    this.fetchAnswersByUser();
+    this.fetchQuestionsByUser();
+  }
 
   ngOnInit() {
-    this.fetchUserDetails();
     this.currentUser = this._stateService.userState;
     this.askQuestionForm = this._fb.group({
       desc: ['', [Validators.required]]
@@ -51,15 +56,16 @@ export class UserProfileComponent implements OnInit {
   }
 
   deleteQuestion(id: number) {
-    this._datatService.deleteQuestionById(id)
+    this._dataService.deleteQuestionById(id)
       .subscribe(_ => {
-        this.fetchUserDetails();
+        this.fetchQuestionsByUser();
       },
         err => {
           this._notify.error(err);
         })
   }
 
+<<<<<<< HEAD
   deleteAnswer(id: number){
     this._datatService.deleteAnswerById(id)
       .subscribe(_=>{
@@ -77,51 +83,73 @@ export class UserProfileComponent implements OnInit {
       .subscribe(_ => {
         this.fetchUserDetails();
         this.closeButtonEl.nativeElement.click();
-      },
-        err => {
-          this._notify.error(err);
-        })
-  }
-
-  fetchUserDetails() {
-    this._datatService.fetchLoggedInUserId()
-      .subscribe(respObj => {
-        const userId: number = respObj['id'];
-        this._datatService.fetchUserById(userId)
-          .subscribe(respObj => {
-            this._stateService.userState.userId = respObj['id'];
-            this._stateService.userState.email = respObj['email'];
-            this._stateService.userState.firstName = respObj['firstName'];
-            this._stateService.userState.lastName = respObj['lastName'];
-            this._stateService.userState.questionList = respObj['questions'];
-            this._stateService.userState.answerList = respObj['answers'];
-            this._stateService.userState.questionsCount = respObj['questions'].length;
-            this._stateService.userState.answersCount = respObj['answers'].length;
-          }, err => {
-            this._notify.error(err);
-          })
+=======
+  deleteAnswer(id: string) {
+    this._dataService.deleteAnswerById(id)
+      .subscribe(_ => {
+        this.fetchAnswersByUser();
+>>>>>>> dev
       },
         err => {
           this._notify.error(err)
         })
   }
 
-  processFile(imageInput: any) {
-    const file: File = imageInput.files[0];
-    const reader = new FileReader();
-    reader.addEventListener('load', (event: any) => {
-      this.selectedFile = new ImageSnippet(event.target.result, file);
-      this._datatService.updateCoverImage(this.selectedFile.file).subscribe(
-        res => {
+  fetchUserDetails() {
+    this._dataService.fetchUserById(this.userId)
+      .subscribe(respObj => {
+        this._stateService.userState.email = respObj['email'];
+        this._stateService.userState.firstName = respObj['first_name'];
+        this._stateService.userState.lastName = respObj['last_name'];
+        this.profileImg = respObj['profileImg'];
+        this.coverImg = respObj['coverImg'];
+        if (!this.coverImg.includes('placeholder')) {
+          respObj['coverImg'] = environment.apiUrl.concat('/').concat(respObj['coverImg']);
+          this.coverImg = respObj['coverImg'];
+        }
+        if (!this.profileImg.includes('placeholder')) {
+          respObj['profileImg'] = environment.apiUrl.concat('/').concat(respObj['profileImg']);
+          this.profileImg = respObj['profileImg'];
+        }
 
-        },
-        err => {
-
-        })
-    });
-    reader.readAsDataURL(file);
+      }, err => {
+        this._notify.error(err);
+      })
   }
 
+  fetchQuestionsByUser() {
+    this._dataService.fetchQuestionsByUser(this.userId)
+      .subscribe(respObj => {
+        this._stateService.userState.questionList = respObj;
+        this._stateService.userState.questionsCount = this._stateService.userState.questionList.length;
+      }, err => {
+        this._notify.error(err);
+      })
+  }
+
+  fetchAnswersByUser() {
+    this._dataService.fetchAnswersByUser(this.userId)
+      .subscribe(respObj => {
+        this._stateService.userState.answerList = respObj;
+        this._stateService.userState.answersCount = this._stateService.userState.answerList.length;
+      }, err => {
+        this._notify.error(err);
+      })
+  }
+
+  changePicture(event, type) {
+    this.imgFile = event.target.files[0];
+    this._dataService.changeImage(this.imgFile, type, this.loggedInUser)
+      .subscribe(
+        _ => {
+          this.fetchUserDetails();
+          this._notify.success('Changed successfully!');
+        },
+        err => {
+          this._notify.error(err);
+        }
+      )
+  }
 
   onToggleQuestionAnswer(toggleParam: string) {
     switch (toggleParam) {

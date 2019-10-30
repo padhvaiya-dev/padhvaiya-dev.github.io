@@ -2,31 +2,44 @@
 <div class="search-sec">
     <div class="container">
         <div class="search-box">
+<<<<<<< HEAD
                 <input type="text" placeholder="Enter your questions  here..." [(ngModel)]="searchTerm">
+=======
+            <input type="text" [(ngModel)]="searchTerm" placeholder="Enter your questions  here...">
+>>>>>>> dev
         </div>
     </div>
 </div>
 <div class="main">
     <div class="container">
         <div class="main-section-data">
-            <div class="row mt-5">
+            <div class="row mt-5 d-flex justify-content-center">
                 <div class="col-lg-3"></div>
+<<<<<<< HEAD
                 <div class="col-lg-6">
                     <div class="post-bar" *ngFor="let question of questionList|filter:searchTerm">
+=======
+                <div class="col-lg-6" *ngIf="questionList?.length > 0; else noData">
+                    <div class="post-bar" *ngFor="let question of questionList | filter:searchTerm">
+>>>>>>> dev
                         <div class="post_topbar">
                             <div class="usy-dt">
                                 <img src="assets/images/cmp-icon6.png" width="35" height="35">
                                 <div class="usy-name">
-                                    <h3>Question creator</h3>
+                                    <a routerLink="/user/{{question?.userId?._id}}">
+                                        <h3>{{question?.userId?.first_name+" "+question?.userId?.last_name}}</h3>
+                                    </a>
                                     <span>
                                         <img src="assets/images/clock.png">
-                                        3 min ago
+                                        {{question.createdAt | date:'longDate'}}
                                     </span>
                                 </div>
                             </div>
                         </div>
                         <div class="job_descp">
-                            <a routerLink="/questions/{{question.id}}"><h3 style="cursor: pointer; text-decoration: underline">{{question.desc}}</h3></a>
+                            <a routerLink="/questions/{{question._id}}">
+                                <h3 style="cursor: pointer; text-decoration: underline">{{question?.desc}}</h3>
+                            </a>
                             <div *ngIf="question?.answers?.length == 0; else hasAns">
                                 No Answer
                             </div>
@@ -36,6 +49,12 @@
                 </div>
                 <div class="col-lg-3"></div>
             </div>
+           
         </div>
+       
     </div>
+   
 </div>
+<ng-template #noData>
+        <p class="h1" style="text-align: center">No questions</p>
+</ng-template>

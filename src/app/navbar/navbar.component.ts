@@ -16,10 +16,12 @@ export class NavbarComponent implements OnInit {
   @ViewChild('userSettings', { static: true }) private userSettingsEl: ElementRef;
   @ViewChild('quesTab', { static: false }) public quesTabEl: ElementRef;
   @ViewChild('ansTab', { static: false }) public ansTabEl: ElementRef;
-  @ViewChild('closeButton', { static: false }) public closeButtonEl: ElementRef;
+  @ViewChild('closeButton', { static: true }) public closeButton: ElementRef;
 
+  userId: string;
+  userName: string;
+  imgFile: File;
   askQuestionForm: FormGroup
-  userLoggedIn: string = 'Guest';
   constructor(
     private _dataService: DataService,
     private _renderer: Renderer2,
@@ -29,7 +31,8 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.userLoggedIn = localStorage.getItem('loggedInUser');
+    this.userId = JSON.parse(localStorage.getItem('currentUser'))._id;
+    this.userName = JSON.parse(localStorage.getItem('currentUser')).first_name;
     this.askQuestionForm = this._fb.group({
       desc: ['', [Validators.required]]
     })
@@ -42,7 +45,7 @@ export class NavbarComponent implements OnInit {
   fetchUserDetails() {
     this._dataService.fetchLoggedInUserId()
       .subscribe(respObj => {
-        const userId: number = respObj['id'];
+        const userId: string = respObj['id'];
         this._dataService.fetchUserById(userId)
           .subscribe(respObj => {
             this._stateService.userState.userId = respObj['id'];
@@ -63,17 +66,33 @@ export class NavbarComponent implements OnInit {
   }
 
   onNewQuestionSubmit() {
-    const userId: number = this._stateService.userState.userId;
-    if (!this.askQuestionForm.valid) this._notify.warning('Question cannot be empty');
-    this._dataService.createQuestionByUser(this.askQuestionForm.value, userId)
+    const userId: string = this._dataService.currentUserValue._id;
+    if (!this.askQuestionForm.valid) this._notify.warning('Answer cannot be empty');
+    this._dataService.createQuestionByUser(this.askQuestionForm.value, userId, this.imgFile)
       .subscribe(_ => {
-        this._notify.info('You asked a question!');
-        this.fetchUserDetails();
-        this.closeButtonEl.nativeElement.click();
+        this._notify.success('You asked a question!');
+        this.closeButton.nativeElement.click();
+        this.fetchAllQuestions();
       },
         err => {
           this._notify.error(err);
         })
+  }
+
+  fetchAllQuestions() {
+    this._dataService.fetchQuestions()
+      .subscribe(
+        respObj => {
+          this._stateService.questionDetailState.questionList = respObj;
+        },
+        err => {
+          this._notify.error(err);
+        }
+      )
+  }
+
+  fileUpload(event) {
+    this.imgFile = event.target.files[0];
   }
 
   onToggleProfile() {

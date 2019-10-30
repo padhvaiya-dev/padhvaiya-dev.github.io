@@ -3,10 +3,17 @@
     <div class="container">
         <div class="main-section-data">
             <div class="row mt-5">
-                <div class="col-lg-4"></div>
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <p class="h3">{{questionDesc}}</p>
+                    <p class="h6">asked by - <a routerLink="../../user/{{userId}}">{{userName}}</a></p>
                     <hr />
+                </div>
+                <div class="col-lg-9" *ngIf="questionImgRef">
+                    <img src="{{hostName +'/'+ questionImgRef}}" width="1030" height="350">
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-lg-12">
                     <div class="d-flex justify-content-between mb-3">
                         <p class="h5">{{answerCount}} answer(s)</p>
                         <button class="btn btn-success btn-md" data-toggle="modal" data-target="#answerModal">Write an
@@ -19,7 +26,12 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h3 class="modal-title" id="exampleModalLabel">Write an Answer</h3>
+<<<<<<< HEAD
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" #closeButton>
+=======
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                        #closeButton>
+>>>>>>> dev
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -29,6 +41,8 @@
                                             <label for="desc"></label>
                                             <input type="text" class="form-control" formControlName="desc" id="desc"
                                                 aria-describedby="desc" placeholder="Your answer goes here...">
+                                            <input type="file" class="form-control" id="file"
+                                                (change)="fileUpload($event);" enctype="multipart/form-data">
                                         </div>
                                         <button class="btn btn-primary" type="submit">Submit</button>
                                     </form>
@@ -45,23 +59,25 @@
                             <div class="usy-dt">
                                 <img src="assets/images/cmp-icon6.png" width="35" height="35">
                                 <div class="usy-name">
-                                    <h3>Answer creator</h3>
+                                    <a routerLink="/user/{{answer?.userId?._id}}" style="text-decoration: underline">
+                                        <h3>{{ answer?.userId?.first_name + " "+ answer?.userId?.last_name }}</h3>
+                                    </a>
                                     <span>
                                         <img src="assets/images/clock.png">
-                                        3 min ago
+                                        {{answer?.createdAt | date:'longDate'}}
                                     </span>
                                 </div>
                             </div>
-                            <div class="ed-opts" *ngIf="answer.userId == _stateService.userState.userId">
-                                <button class="btn btn-danger btn-sm" (click)="deleteAnswer(answer.id)">Delete</button>
+                            <div class="ed-opts" *ngIf="answer?.userId?._id == loggenInUser">
+                                <button class="btn btn-danger btn-sm" (click)="deleteAnswer(answer._id)">Delete</button>
                             </div>
                         </div>
                         <div class="job_descp">
-                            <h3>{{answer.desc}}</h3>
+                            <h3>{{answer?.desc}}</h3>
+                            <img src='{{hostName + answer?.imgRef}}' width="1030" height="350">
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2"></div>
             </div>
         </div>
     </div>

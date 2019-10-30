@@ -84,10 +84,11 @@
                         </div>
                     </li> -->
                     <li>
-                        <button type="button" class="btn btn-primary btn-lg ml-5" data-toggle="modal"
+                        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal"
                             data-target="#exampleModal">
                             Ask a question
                         </button>
+<<<<<<< HEAD
                          <!-- Question Modal -->
                          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
                          aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -126,6 +127,39 @@
                              </div>
                          </div>
                      </div>
+=======
+                        <!-- Question Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title" id="exampleModalLabel">Ask a Question</h3>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                                            #closeButton>
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form [formGroup]="askQuestionForm" (ngSubmit)="onNewQuestionSubmit();">
+                                            <div class="form-group">
+                                                <label for="desc"></label>
+                                                <input type="text" class="form-control" formControlName="desc" id="desc"
+                                                    aria-describedby="desc" placeholder="Enter your question">
+                                                <input type="file" class="form-control" id="file"
+                                                    (change)="fileUpload($event);" enctype="multipart/form-data">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+>>>>>>> dev
                     </li>
                 </ul>
 
@@ -136,13 +170,12 @@
             </div>
             <!--menu-btn end-->
             <div class="user-account" style="cursor: pointer" (click)="onToggleProfile()">
-                <div class="user-info">
-                    <img src="assets/images/icon1.png" alt="">
-                    <p style="color: #fff">{{userLoggedIn}}</p>
-                    <i class="la la-sort-down"></i>
+                <div class="user-info" class="mt-3 pt-1">
+                    <p style="color: #fff">{{userName}} <i class="la la-sort-down"></i></p>
+                   
                 </div>
                 <div class="user-account-settingss" #userSettings>
-                    <h3 class="tc"><a routerLink="/profile" title="">View Profile</a></h3>
+                    <h3 class="tc"><a routerLink="/user/{{userId}}" title="">View Profile</a></h3>
                     <!-- <ul class="us-links">
                         <li><a routerLink="/settings" title="">Account Setting</a></li>
                         <li><a href="#" title="">Privacy</a></li>

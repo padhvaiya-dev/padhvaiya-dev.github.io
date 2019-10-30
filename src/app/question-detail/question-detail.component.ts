@@ -4,6 +4,7 @@ import { DataService } from '../services/data.service';
 import { AlertService } from '../services/alert.service';
 import { StateService } from '../services/state.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -12,13 +13,23 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./question-detail.component.css']
 })
 export class QuestionDetailComponent implements OnInit {
-
-  questionId: number;
+  questionImgRef: string;
+  hostName: string;
+  loggenInUser: string; 
+  userName: string;
+  userId: string;
+  questionId: string;
   questionDesc: string;
   answerCount: number;
   answerList: Array<object>;
+<<<<<<< HEAD
   answerForm: FormGroup
   @ViewChild('closeButton', { static: false }) public closeButtonEl: ElementRef;
+=======
+  answerForm: FormGroup;
+  imgFile: File;
+  @ViewChild('closeButton', { static: true }) public closeButton: ElementRef;
+>>>>>>> dev
   constructor(
     private _route: ActivatedRoute,
     private _dataService: DataService,
@@ -26,24 +37,42 @@ export class QuestionDetailComponent implements OnInit {
     private _stateService: StateService,
     private _fb: FormBuilder,
 
-  ) { }
+  ) {
+    this.hostName = environment.apiUrl;
+    this.loggenInUser = JSON.parse(localStorage.getItem('currentUser'))._id;
+    this.questionId = this._route.snapshot.paramMap.get('id').toString();
+    this.fetchQuestionById(this.questionId);
+  }
 
   ngOnInit() {
-    this.questionId = +this._route.snapshot.paramMap.get('id');
-    this.fetchQuestionById(this.questionId);
     this.fetchAnswersByQuestion(this.questionId);
     this.answerForm = this._fb.group({
       desc: ['', [Validators.required]]
     })
   }
 
-  fetchAnswersByQuestion(id: number) {
+  fetchQuestionById(id: string) {
+    this._dataService.fetchQuestionById(id)
+      .subscribe(
+        respObj => {
+          this._stateService.questionDetailState.questionDesc = respObj['desc'];
+          this.questionDesc = respObj['desc'];
+          this.questionImgRef = respObj['imgRef'];
+          this.userId = respObj['userId']['_id'];
+          this.userName = respObj['userId']['first_name'].concat(' ').concat(respObj['userId']['last_name']);
+        },
+        err => {
+          this._notify.error(err);
+        }
+      )
+  }
+
+  fetchAnswersByQuestion(id: string) {
     this._dataService.fetchAnswersByQuestionId(id)
       .subscribe(
         respObj => {
-          this._stateService.questionDetailState.questionId = this.questionId;
           this._stateService.questionDetailState.answerList = respObj;
-          this.answerList = this._stateService.questionDetailState.answerList;
+          this.answerList = respObj;
           this.answerCount = this._stateService.questionDetailState.answerList.length;
         },
         err => {
@@ -52,40 +81,38 @@ export class QuestionDetailComponent implements OnInit {
       )
   }
 
-  fetchQuestionById(id: number) {
-    this._dataService.fetchQuestionById(id)
-      .subscribe(
-        respObj => {
-          this._stateService.questionDetailState.questionDesc = respObj['desc'];
-          this.questionDesc = respObj['desc'];
-        },
-        err => {
-          this._notify.error(err);
-        }
-      )
-  }
+
 
   onNewAnswerSubmit() {
-    const userId: number = this._stateService.userState.userId;
     if (!this.answerForm.valid) this._notify.warning('Answer cannot be empty');
-    this._dataService.createAnswerByUserAndQuestion(this.answerForm.value, userId, this.questionId)
+    this._dataService.createAnswerByUserAndQuestion(this.answerForm.value, this.loggenInUser, this.questionId, this.imgFile)
       .subscribe(_ => {
         this._notify.success('You wrote an answer!');
+<<<<<<< HEAD
         this.fetchAnswersByQuestion(this.questionId);
         this.closeButtonEl.nativeElement.click();
+=======
+        this.closeButton.nativeElement.click();
+        this.fetchAnswersByQuestion(this.questionId);
+>>>>>>> dev
       },
         err => {
           this._notify.error(err);
         })
   }
 
-  deleteAnswer(id: number){
+  fileUpload(event) {
+    this.imgFile = event.target.files[0];
+  }
+
+  deleteAnswer(id: string) {
     this._dataService.deleteAnswerById(id)
-      .subscribe(_=>{
-        this.fetchAnswersByQuestion(this.questionId);      },
-      err=>{
-        this._notify.error(err)
-      })
+      .subscribe(_ => {
+        this.fetchAnswersByQuestion(this.questionId);
+      },
+        err => {
+          this._notify.error(err)
+        })
   }
 
 }
