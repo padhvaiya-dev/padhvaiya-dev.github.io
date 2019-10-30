@@ -139,12 +139,13 @@ export class DataService {
       .pipe(catchError(this.handleError))
   }
 
-  uploadFile(image: File, desc: string): Observable<Response> {
+  changeImage(image: File, imageType: string, userId: string) {
     const formData = new FormData();
     formData.append('file', image);
-    formData.append('desc', desc);
-    return this._http.post<any>('http://localhost:3000/questions', formData)
-      .pipe(catchError(this.handleError))
+    formData.append('userId', userId);
+    formData.append('imageType', imageType);
+    return this._http.post(environment.apiUrl + '/files/changePicture', formData)
+      .pipe(catchError(this.handleError));
   }
 
 

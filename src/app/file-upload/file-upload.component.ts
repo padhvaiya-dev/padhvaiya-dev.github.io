@@ -22,13 +22,11 @@ export class FileUploadComponent implements OnInit {
 
   fileUpload(event){
     this.imgFile = event.target.files[0];
-    console.log(this.imgFile);
-  
   }
 
-  hit(){
+  /* hit(){
     console.log(this.imgFile);
     this._ds.uploadFile(this.imgFile, this.desc)
     .subscribe(resp=> console.log(resp))
-  }
-}
+  } */
+} 

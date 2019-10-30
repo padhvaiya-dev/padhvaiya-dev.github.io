@@ -55,14 +55,16 @@
                             <div class="usy-dt">
                                 <img src="assets/images/cmp-icon6.png" width="35" height="35">
                                 <div class="usy-name">
-                                    <a routerLink="/user/{{answer?.userId?._id}}" style="text-decoration: underline"><h3>{{ answer?.userId?.first_name + " "+ answer?.userId?.last_name }}</h3></a>
+                                    <a routerLink="/user/{{answer?.userId?._id}}" style="text-decoration: underline">
+                                        <h3>{{ answer?.userId?.first_name + " "+ answer?.userId?.last_name }}</h3>
+                                    </a>
                                     <span>
                                         <img src="assets/images/clock.png">
                                         {{answer?.createdAt | date:'longDate'}}
                                     </span>
                                 </div>
                             </div>
-                            <div class="ed-opts" *ngIf="answer?.userId?._id == userId">
+                            <div class="ed-opts" *ngIf="answer?.userId?._id == loggenInUser">
                                 <button class="btn btn-danger btn-sm" (click)="deleteAnswer(answer._id)">Delete</button>
                             </div>
                         </div>

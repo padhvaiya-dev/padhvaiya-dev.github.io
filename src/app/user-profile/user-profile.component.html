@@ -1,7 +1,8 @@
 <app-navbar></app-navbar>
-<input style="display: none" type="file" (change)="processFile(imageInput)" #imageInput accept="image/*">
+<input style="display: none" type="file" (change)="changePicture($event,'cover')" #coverImage
+    enctype="multipart/form-data">
 <section class="cover-sec" style="cursor: pointer">
-    <img src="http://via.placeholder.com/1600x400" alt="" (click)="imageInput.click()">
+    <img src="{{coverImg}}" alt="" [(ngModel)]="coverImg" (click)="coverImage.click()" width="1600" height="400">
 </section>
 <main>
     <div class="main-section">
@@ -11,8 +12,10 @@
                     <div class="col-lg-4">
                         <div class="main-left-sidebar">
                             <div class="user_profile">
-                                <div class="user-pro-img">
-                                    <img src="http://via.placeholder.com/170x170" alt="">
+                                <div class="user-pro-img" style="cursor: pointer">
+                                    <input style="display: none" type="file" (change)="changePicture($event,'profile')"
+                                        #profileImage enctype="multipart/form-data">
+                                    <img src="{{profileImg}}" alt="" [(ngModel)]="profileImg" (click)="profileImage.click()" width="170" height="170">
                                 </div>
                                 <!--user-pro-img end-->
                                 <div class="user_pro_status">
@@ -21,7 +24,7 @@
                                             <li><a href="#" title="" class="hre">Hire</a></li>
                                         </ul> -->
                                     <ul class="flw-status">
-                                        <li> 
+                                        <li>
                                             <span>Questions asked</span>
                                             <b>{{currentUser.questionsCount}}</b>
                                         </li>
@@ -98,8 +101,7 @@
                                                         <div class="form-group">
                                                             <label for="desc"></label>
                                                             <input type="text" class="form-control"
-                                                                formControlName="desc" id="desc"
-                                                                aria-describedby="desc"
+                                                                formControlName="desc" id="desc" aria-describedby="desc"
                                                                 placeholder="Enter your question">
                                                         </div>
                                                         <!--  <div class="form-group">
@@ -112,8 +114,8 @@
                                                     </form>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary"
-                                                        data-dismiss="modal" #closeQuestionBox>Close</button>
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                                        #closeQuestionBox>Close</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -127,19 +129,23 @@
                                         <div class="usy-dt">
                                             <img src="assets/images/cmp-icon6.png" width="35" height="35">
                                             <div class="usy-name">
-                                                <h3>{{question?.userId.first_name + " "+ question?.userId.last_name}}</h3>
+                                                <h3>{{question?.userId.first_name + " "+ question?.userId.last_name}}
+                                                </h3>
                                                 <span>
                                                     <img src="assets/images/clock.png">
                                                     {{question?.createdAt | date:'longDate'}}
                                                 </span>
-                                            </div>  
+                                            </div>
                                         </div>
                                         <div class="ed-opts" *ngIf="userId === loggedInUser">
-                                           <button class="btn btn-danger btn-sm" (click)="deleteQuestion(question._id)">Delete</button>
+                                            <button class="btn btn-danger btn-sm"
+                                                (click)="deleteQuestion(question._id)">Delete</button>
                                         </div>
                                     </div>
                                     <div class="job_descp">
-                                        <a routerLink="../../questions/{{question._id}}"><h3>{{question.desc}}</h3></a>
+                                        <a routerLink="../../questions/{{question._id}}">
+                                            <h3>{{question.desc}}</h3>
+                                        </a>
                                         <div *ngIf="question?.answers?.length == 0; else hasAns">
                                             No Answer
                                         </div>
@@ -159,12 +165,13 @@
                                                 <h3>{{answer?.userId?.first_name + " "+ answer?.userId?.last_name}}</h3>
                                                 <span>
                                                     <img src="assets/images/clock.png">
-                                                   {{answer?.createdAt | date:'longDate'}}
+                                                    {{answer?.createdAt | date:'longDate'}}
                                                 </span>
                                             </div>
                                         </div>
                                         <div class="ed-opts" *ngIf="userId === loggedInUser">
-                                                <button class="btn btn-danger btn-sm" (click)="deleteAnswer(answer._id)">Delete</button>
+                                            <button class="btn btn-danger btn-sm"
+                                                (click)="deleteAnswer(answer._id)">Delete</button>
                                         </div>
                                     </div>
                                     <div class="job_descp">

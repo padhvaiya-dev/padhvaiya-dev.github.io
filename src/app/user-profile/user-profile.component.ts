@@ -4,16 +4,9 @@ import { StateService } from '../services/state.service';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AlertService } from '../services/alert.service';
 import { ActivatedRoute } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 
-@Directive({ selector: 'question-settings' })
-export class QuestionSettings {
-  @Input() id !: string;
-}
-
-class ImageSnippet {
-  constructor(public src: string, public file: File) { }
-}
 
 @Component({
   selector: 'app-user-profile',
@@ -22,11 +15,15 @@ class ImageSnippet {
 })
 export class UserProfileComponent implements OnInit {
 
+  imgFile: File;
   currentUser = {};
   askQuestionForm: FormGroup
   isFirstActive: boolean = true;
-  selectedFile: ImageSnippet;
   isDisabled: boolean = false;
+  userId: string;
+  loggedInUser: string;
+  profileImg: string;
+  coverImg: string;
 
   @ViewChild('quesTab', { static: false }) public quesTabEl: ElementRef;
   @ViewChild('ansTab', { static: false }) public ansTabEl: ElementRef;
@@ -35,9 +32,6 @@ export class UserProfileComponent implements OnInit {
   @ViewChild('questionSettings', { static: false }) public questionSettingsEl: ElementRef;
   @ViewChild('questionBox', { static: true }) public questionBox: ElementRef;
 
-
-  userId: string;
-  loggedInUser: string;
   constructor(
     private _dataService: DataService,
     public _stateService: StateService,
@@ -87,6 +81,17 @@ export class UserProfileComponent implements OnInit {
         this._stateService.userState.email = respObj['email'];
         this._stateService.userState.firstName = respObj['first_name'];
         this._stateService.userState.lastName = respObj['last_name'];
+        this.profileImg = respObj['profileImg'];
+        this.coverImg = respObj['coverImg'];
+        if (!this.coverImg.includes('placeholder')) {
+          respObj['coverImg'] = environment.apiUrl.concat('/').concat(respObj['coverImg']);
+          this.coverImg = respObj['coverImg'];
+        }
+        if (!this.profileImg.includes('placeholder')) {
+          respObj['profileImg'] = environment.apiUrl.concat('/').concat(respObj['profileImg']);
+          this.profileImg = respObj['profileImg'];
+        }
+
       }, err => {
         this._notify.error(err);
       })
@@ -110,6 +115,20 @@ export class UserProfileComponent implements OnInit {
       }, err => {
         this._notify.error(err);
       })
+  }
+
+  changePicture(event, type) {
+    this.imgFile = event.target.files[0];
+    this._dataService.changeImage(this.imgFile, type, this.loggedInUser)
+      .subscribe(
+        _ => {
+          this.fetchUserDetails();
+          this._notify.success('Changed successfully!');
+        },
+        err => {
+          this._notify.error(err);
+        }
+      )
   }
 
   onToggleQuestionAnswer(toggleParam: string) {
