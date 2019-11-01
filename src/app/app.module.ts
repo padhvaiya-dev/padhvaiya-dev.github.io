@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule, } from '@angular/core';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms'
-import {Ng2SearchPipeModule} from 'ng2-search-filter';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -16,6 +17,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/auth-interceptor';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
+;
 
 @NgModule({
   declarations: [
@@ -43,7 +45,10 @@ import { QuestionDetailComponent } from './question-detail/question-detail.compo
       positionClass: 'toast-top-right'
     }),
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: LocationStrategy, useClass: HashLocationStrategy }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
