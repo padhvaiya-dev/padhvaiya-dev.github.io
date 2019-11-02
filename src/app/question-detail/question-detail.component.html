@@ -65,7 +65,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="ed-opts" *ngIf="answer?.userId?._id == loggenInUser">
+                                <div class="ed-opts" *ngIf="answer?.userId?._id == loggedInUser">
                                     <button class="btn btn-danger btn-sm"
                                         (click)="deleteAnswer(answer._id)">Delete</button>
                                 </div>
