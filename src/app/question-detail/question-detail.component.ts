@@ -15,7 +15,7 @@ import { environment } from '../../environments/environment';
 export class QuestionDetailComponent implements OnInit {
   questionImgRef: string;
   hostName: string;
-  loggenInUser: string;
+  loggedInUser: string;
   userName: string;
   userId: string;
   questionId: string;
@@ -34,7 +34,7 @@ export class QuestionDetailComponent implements OnInit {
 
   ) {
     this.hostName = environment.apiUrl;
-    (JSON.parse(localStorage.getItem('currentUser'))) ? this.loggenInUser = JSON.parse(localStorage.getItem('currentUser'))._id : this.loggenInUser = null;
+    (JSON.parse(localStorage.getItem('currentUser'))) ? this.loggedInUser = JSON.parse(localStorage.getItem('currentUser'))._id : this.loggedInUser = null;
     this.questionId = this._route.snapshot.paramMap.get('id').toString();
     this.fetchQuestionById(this.questionId);
   }
@@ -80,7 +80,7 @@ export class QuestionDetailComponent implements OnInit {
 
   onNewAnswerSubmit() {
     if (!this.answerForm.valid) this._notify.warning('Answer cannot be empty');
-    this._dataService.createAnswerByUserAndQuestion(this.answerForm.value, this.loggenInUser, this.questionId, this.imgFile)
+    this._dataService.createAnswerByUserAndQuestion(this.answerForm.value, this.loggedInUser, this.questionId, this.imgFile)
       .subscribe(_ => {
         this._notify.success('You wrote an answer!');
         this.closeButton.nativeElement.click();
