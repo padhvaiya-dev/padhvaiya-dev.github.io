@@ -31,11 +31,17 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.userId = JSON.parse(localStorage.getItem('currentUser'))._id;
-    this.userName = JSON.parse(localStorage.getItem('currentUser')).first_name;
-    this.askQuestionForm = this._fb.group({
-      desc: ['', [Validators.required]]
-    })
+    if(!JSON.parse(localStorage.getItem('currentUser'))){
+      this.userId = null;
+      this.userName = 'Guest'; 
+    } 
+    else{
+      this.userId = JSON.parse(localStorage.getItem('currentUser'))._id;
+      this.userName = JSON.parse(localStorage.getItem('currentUser')).first_name; 
+      this.askQuestionForm = this._fb.group({
+        desc: ['']
+      })
+    }
   }
 
   goLogout() {

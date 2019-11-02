@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     private _stateService: StateService
   ) {
     if (this._dataService.currentUserValue) {
-      this._router.navigateByUrl('/dashboard')
+      this._router.navigateByUrl('/home')
     }
   }
 
@@ -51,7 +51,7 @@ export class LoginComponent implements OnInit {
           this._stateService.userState.answerList = respObj['answers'];
           this._stateService.userState.questionsCount = respObj['questions'].length;
           this._stateService.userState.answersCount = respObj['answers'].length;
-          this._router.navigateByUrl('/dashboard');
+          this._router.navigateByUrl('/home');
         },
         err => {
           this.alertService.error(err)

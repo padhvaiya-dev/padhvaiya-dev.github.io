@@ -9,13 +9,13 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: DashboardComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', canActivate: [AuthGuard], component: DashboardComponent },
-  { path: 'contact-us', canActivate: [AuthGuard], component: ContactUsComponent },
-  { path: 'about-us', canActivate: [AuthGuard], component: AboutUsComponent },
+  { path: 'contact-us', component: ContactUsComponent },
+  { path: 'about-us', component: AboutUsComponent },
   { path: 'user/:id', canActivate: [AuthGuard], component: UserProfileComponent },
-  { path: 'questions/:id', canActivate: [AuthGuard], component: QuestionDetailComponent },
+  { path: 'questions/:id',component: QuestionDetailComponent },
 ];
 
 @NgModule({

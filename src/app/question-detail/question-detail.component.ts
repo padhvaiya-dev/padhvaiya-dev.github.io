@@ -15,13 +15,13 @@ import { environment } from '../../environments/environment';
 export class QuestionDetailComponent implements OnInit {
   questionImgRef: string;
   hostName: string;
-  loggenInUser: string; 
+  loggenInUser: string;
   userName: string;
   userId: string;
   questionId: string;
   questionDesc: string;
   answerCount: number;
-  answerList: Array<object>;
+  answerList: Array<object> = [];
   answerForm: FormGroup;
   imgFile: File;
   @ViewChild('closeButton', { static: true }) public closeButton: ElementRef;
@@ -34,7 +34,7 @@ export class QuestionDetailComponent implements OnInit {
 
   ) {
     this.hostName = environment.apiUrl;
-    this.loggenInUser = JSON.parse(localStorage.getItem('currentUser'))._id;
+    (JSON.parse(localStorage.getItem('currentUser'))) ? this.loggenInUser = JSON.parse(localStorage.getItem('currentUser'))._id : this.loggenInUser = null;
     this.questionId = this._route.snapshot.paramMap.get('id').toString();
     this.fetchQuestionById(this.questionId);
   }
@@ -66,8 +66,8 @@ export class QuestionDetailComponent implements OnInit {
     this._dataService.fetchAnswersByQuestionId(id)
       .subscribe(
         respObj => {
-          this._stateService.questionDetailState.answerList = respObj;
-          this.answerList = respObj;
+          this._stateService.questionDetailState.answerList = [...respObj];
+          this.answerList = [...respObj];
           this.answerCount = this._stateService.questionDetailState.answerList.length;
         },
         err => {
