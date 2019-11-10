@@ -1,0 +1,24 @@
+.group-main {
+    float: left;
+	width: 100%;
+    border-radius: 25px;
+    min-width: 200px;
+	box-shadow: 10px 10px 5px #aaaaaa;
+	background-color: #fff;
+	border-left: 1px solid #e4e4e4;
+	border-right: 1px solid #e4e4e4;
+	border-bottom: 1px solid #e4e4e4;
+	margin-bottom: 20px;
+}
+
+.card{
+    display: flex;
+    min-width: 100%;
+    min-height: 200px;
+    overflow-x: auto;
+}
+
+.card-container{
+    min-width: 200px;
+    margin: 5px;
+}

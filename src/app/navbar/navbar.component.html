@@ -15,20 +15,31 @@
                 <ul>
                     <li>
                         <a routerLink="/home" title="">
-                            <span><img src="assets/images/icon1.png" alt=""></span>
-                            Home
+                            <span><i class="material-icons">
+                                home
+                                </i><p class="nav-item" style="color: #fff">Home</p></span>
+                            
                         </a>
                     </li>
                     <li>
                         <a routerLink="/about-us" title="">
-                            <span><img src="assets/images/icon1.png" alt=""></span>
-                            About Us
+                            <span><i class="material-icons">
+                                info
+                                </i><p class="nav-item" style="color: #fff">About Us</p></span>
                         </a>
                     </li>
                     <li>
                         <a routerLink="/contact-us" title="">
-                            <span><img src="assets/images/icon1.png" alt=""></span>
-                            Contact Us
+                           <span><i class="material-icons">
+                                call
+                                </i><p class="nav-item" style="color: #fff">Contact Us</p></span>
+                        </a>
+                    </li>
+                    <li>
+                        <a routerLink="/campus-connect" title="">
+                           <span><i class="material-icons">
+                            people
+                                </i><p class="nav-item" style="color: #fff">Campus Connect</p></span>
                         </a>
                     </li>
                     <!--   <li>
@@ -131,7 +142,7 @@
             <!--menu-btn end-->
             <div class="user-account" style="cursor: pointer" (click)="onToggleProfile()">
                 <div class="user-info" class="mt-3 pt-1">
-                    <p style="color: #fff">{{userName}} <i class="la la-sort-down"></i></p>
+                    <p class="user-screen">{{userName}} <i class="la la-sort-down"></i></p>
 
                 </div>
                 <div class="user-account-settingss" #userSettings>

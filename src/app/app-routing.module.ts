@@ -7,6 +7,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { AboutUsComponent } from './about-us/about-us.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
+import { CampusConnectComponent}  from './campus-connect/campus-connect.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -16,6 +17,7 @@ const routes: Routes = [
   { path: 'about-us', component: AboutUsComponent },
   { path: 'user/:id', canActivate: [AuthGuard], component: UserProfileComponent },
   { path: 'questions/:id',component: QuestionDetailComponent },
+  { path:'campus-connect', component: CampusConnectComponent}
 ];
 
 @NgModule({

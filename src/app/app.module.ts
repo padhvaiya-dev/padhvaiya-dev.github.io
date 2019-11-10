@@ -17,6 +17,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { JwtInterceptor } from './interceptors/auth-interceptor';
 import { QuestionDetailComponent } from './question-detail/question-detail.component';
+import { CampusConnectComponent } from './campus-connect/campus-connect.component';
 ;
 
 @NgModule({
@@ -28,7 +29,8 @@ import { QuestionDetailComponent } from './question-detail/question-detail.compo
     ContactUsComponent,
     AboutUsComponent,
     UserProfileComponent,
-    QuestionDetailComponent
+    QuestionDetailComponent,
+    CampusConnectComponent
   ],
   imports: [
     BrowserModule,
