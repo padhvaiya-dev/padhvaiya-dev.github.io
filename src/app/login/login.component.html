@@ -18,24 +18,29 @@
                     <div class="col-lg-6">
                         <div class="login-sec">
                             <ul class="sign-control">
-                                <li data-tab="tab-1" class="current"><a href="#" title="">Sign in</a></li>
-                                <li data-tab="tab-2"><a href="#" title="">Sign up</a></li>
+                                <li data-tab="tab-1" #signInTab class="current"
+                                    (click)="onToggleSignInSignUpTab('signIn')" style="cursor: pointer"><a title="">Sign
+                                        in</a></li>
+                                <li data-tab="tab-2" #signUpTab (click)="onToggleSignInSignUpTab('signUp')"
+                                    style="cursor: pointer"><a title="">Sign up</a></li>
                             </ul>
-                            <div class="sign_in_sec current" id="tab-1">
+                            <div class="sign_in_sec current" #signInBlock id="tab-1">
 
                                 <h3>Sign in</h3>
                                 <form [formGroup]="loginForm" (ngSubmit)="onLogin();">
                                     <div class="row">
                                         <div class="col-lg-12 no-pdd">
                                             <div class="sn-field">
-                                                <input type="text" name="email" placeholder="Email" formControlName="email">
+                                                <input type="text" name="email" placeholder="Email"
+                                                    formControlName="email">
                                                 <i class="la la-user"></i>
                                             </div>
                                             <!--sn-field end-->
                                         </div>
                                         <div class="col-lg-12 no-pdd">
                                             <div class="sn-field">
-                                                <input type="password" name="password" placeholder="Password" formControlName="password">
+                                                <input type="password" name="password" placeholder="Password"
+                                                    formControlName="password">
                                                 <i class="la la-lock"></i>
                                             </div>
                                         </div>
@@ -48,8 +53,9 @@
                                                     </label>
                                                     <small>Remember me</small>
                                                 </div>
-                                             -->    <!--fgt-sec end-->
-                                                <!-- <a href="#" title="">Forgot Password?</a> -->
+                                             -->
+                                            <!--fgt-sec end-->
+                                            <!-- <a href="#" title="">Forgot Password?</a> -->
                                             <!-- </div> -->
                                         </div>
                                         <div class="col-lg-12 no-pdd">
@@ -69,9 +75,10 @@
                                 <!--login-resources end-->
                             </div>
                             <!--sign_in_sec end-->
-                            <div class="sign_in_sec" id="tab-2">
+                            <div class="sign_in_sec" #signUpBlock id="tab-2">
                                 <!--signup-tab end-->
                                 <div class="dff-tab current" id="tab-3">
+                                    <h3>Sign Up</h3>
                                     <form [formGroup]="signUpForm" (ngSubmit)="onSignUp();">
                                         <div class="row">
                                             <div class="col-lg-12 no-pdd">
@@ -86,6 +93,14 @@
                                                     <input type="text" name="name" placeholder="Last Name"
                                                         formControlName="lastName">
                                                     <i class="la la-user"></i>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12 no-pdd">
+                                                <div class="sn-field">
+                                                    Choose college...
+                                                    <select formControlName="college">
+                                                        <option value="{{college?._id}}" *ngFor="let college of collegeList">{{college?.name}}</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12 no-pdd">

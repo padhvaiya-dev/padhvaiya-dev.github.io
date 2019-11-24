@@ -83,7 +83,7 @@ export class DataService {
       .pipe(catchError(this.handleError))
   }
 
-  fetchAnswersByUser(userId: string){
+  fetchAnswersByUser(userId: string) {
     return this._http.get(environment.apiUrl + '/answers/user/' + userId)
       .pipe(catchError(this.handleError));
   }
@@ -93,8 +93,13 @@ export class DataService {
       .pipe(catchError(this.handleError));
   }
 
-  fetchQuestionsByUser(userId: string){
+  fetchQuestionsByUser(userId: string) {
     return this._http.get(environment.apiUrl + '/questions/user/' + userId)
+      .pipe(catchError(this.handleError));
+  }
+
+  fetchCollegeList() {
+    return this._http.get(environment.apiUrl + '/colleges')
       .pipe(catchError(this.handleError));
   }
 

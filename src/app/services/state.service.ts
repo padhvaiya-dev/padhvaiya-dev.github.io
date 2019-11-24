@@ -15,7 +15,8 @@ export class StateService {
     questionsCount: 0,
     answersCount: 0,
     questionList: null,
-    answerList:null
+    answerList:null,
+    collegeList: null
   }
 
   questionDetailState = {

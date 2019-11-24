@@ -84,15 +84,8 @@ export class UserProfileComponent implements OnInit {
         this._stateService.userState.lastName = respObj['last_name'];
         this.profileImg = respObj['profileImg'];
         this.coverImg = respObj['coverImg'];
-        if (!this.coverImg.includes('placeholder')) {
-          respObj['coverImg'] = environment.apiUrl.concat('/').concat(respObj['coverImg']);
-          this.coverImg = respObj['coverImg'];
-        }
-        if (!this.profileImg.includes('placeholder')) {
-          respObj['profileImg'] = environment.apiUrl.concat('/').concat(respObj['profileImg']);
-          this.profileImg = respObj['profileImg'];
-        }
-
+        this.coverImg = respObj['coverImg'];
+        this.profileImg = respObj['profileImg'];
       }, err => {
         this._notify.error(err);
       })
@@ -146,7 +139,6 @@ export class UserProfileComponent implements OnInit {
         this._renderer.removeClass(this.userTabEl.nativeElement, 'current')
         this._renderer.addClass(this.ansTabEl.nativeElement, 'active');
         this._renderer.addClass(this.productTabEl.nativeElement, 'current');
-        this.isFirstActive = false;
         break;
       }
     }

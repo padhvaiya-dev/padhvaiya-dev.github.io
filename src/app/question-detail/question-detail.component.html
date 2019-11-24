@@ -9,7 +9,7 @@
                     <hr />
                 </div>
                 <div class="col-lg-9" *ngIf="questionImgRef">
-                    <img src="{{hostName +'/'+ questionImgRef}}" width="1030" height="350">
+                    <img src="{{questionImgRef}}" width="1030" height="350">
                 </div>
             </div>
             <div class="row mt-5">
@@ -72,7 +72,7 @@
                             </div>
                             <div class="job_descp" >
                                 <h3>{{answer?.desc}}</h3>
-                                <img src='{{hostName + answer?.imgRef}}' width="1030" height="350">
+                                <img src='{{answer?.imgRef}}' width="1030" height="350" *ngIf="answer?.imgRef">
                             </div>
                         </div>
                     </ng-container>
