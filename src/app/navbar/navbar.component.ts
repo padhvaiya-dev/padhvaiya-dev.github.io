@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   @ViewChild('userSettings', { static: true }) private userSettingsEl: ElementRef;
   @ViewChild('quesTab', { static: false }) public quesTabEl: ElementRef;
   @ViewChild('ansTab', { static: false }) public ansTabEl: ElementRef;
-  @ViewChild('closeButton', { static: true }) public closeButton: ElementRef;
+  @ViewChild('closeButton', { static: false }) public closeButton: ElementRef;
 
   userId: string;
   userName: string;
